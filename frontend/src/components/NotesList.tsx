@@ -17,14 +17,21 @@
 import React, {useEffect} from 'react';
 import NoteView from "./NoteView";
 import NoteEditDialog from "./NoteEditDialog";
-import {Note} from "../notesSlice";
+import {Note, NoteArray} from "../notesSlice";
+import PropTypes from "prop-types";
 
-function NotesList({notes, searchQuery, categoryFilter} : Readonly<{notes: Array<Note>, searchQuery: string, categoryFilter: string}>) {
+NotesList.propTypes = {
+    notes: PropTypes.array.isRequired,
+    searchQuery: PropTypes.string.isRequired,
+    categoryFilter: PropTypes.string.isRequired
+}
+
+function NotesList({notes, searchQuery, categoryFilter} : Readonly<{notes: NoteArray, searchQuery: string, categoryFilter: string}>) {
     const [selectedNoteId, setSelectedNoteId] : [string, any] = React.useState("");
     const [editDialogOpen, setEditDialogOpen] : [boolean, any] = React.useState(false);
 
     // Notes projection is a filtered notes list based on selected category and search query
-    const [notesProjection, setNotesProjection] : [Array<Note>, any] = React.useState([]);
+    const [notesProjection, setNotesProjection] : [NoteArray, any] = React.useState([]);
 
     useEffect(() => {
         if (!editDialogOpen) {

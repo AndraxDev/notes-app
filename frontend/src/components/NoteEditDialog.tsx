@@ -18,9 +18,10 @@ import React, {useEffect, useState} from 'react';
 import PropTypes from "prop-types";
 import {useDispatch, useSelector} from "react-redux";
 import {addNote, editNote, Note, removeNote, selectNoteById} from "../notesSlice";
-import MaterialDialog from "./widgets/MaterialDialog";
+import MaterialDialog, {DialogAction} from "./widgets/MaterialDialog";
 import {MaterialTextInputEditText} from "./widgets/MaterialTextInputEditText";
 import {uuidv4} from "../util/UUID";
+import LoadingScreen from "./widgets/LoadingScreen";
 
 NoteEditDialog.propTypes = {
     onClose: PropTypes.func.isRequired,
@@ -37,8 +38,9 @@ function NoteEditDialog({onClose, id, isAdd} : Readonly<{onClose: any, id: strin
     const [noteTitle, setNoteTitle] : [string, any] = useState("");
     const [noteContent, setNoteContent] : [string, any] = useState("");
     const [noteCategory, setNoteCategory] : [string, any] = useState("");
-    const [timestamp, setTimestamp] : [number, any] = useState(0);
     const [saveIsDisabled, setSaveIsDisabled] : [boolean, any] = useState(true);
+    const [loading, setLoading] : [boolean, any] = useState(true);
+    const [errorMessage, setErrorMessage] : [string, any] = useState("");
 
     useEffect(() => {
         if (note) {
@@ -46,7 +48,6 @@ function NoteEditDialog({onClose, id, isAdd} : Readonly<{onClose: any, id: strin
             setNoteTitle(note.title);
             setNoteContent(note.content);
             setNoteCategory(note.category);
-            setTimestamp(note.timestamp);
         }
     }, [note]);
 
@@ -82,66 +83,106 @@ function NoteEditDialog({onClose, id, isAdd} : Readonly<{onClose: any, id: strin
         } else {
             setSaveIsDisabled(false);
         }
-    }, [noteTitle, noteContent, noteCategory, selectedNote]);
+    }, [noteTitle, noteContent, noteCategory, selectedNote, isAdd, note]);
 
     const onDialogClose = () => {
         onClose();
     }
 
     const onNoteSave = () => {
-        //TODO: Push to the server
-        if (isAdd) {
-            const newNote : Note = {
-                id: uuidv4(),
-                title: noteTitle,
-                content: noteContent,
-                category: noteCategory,
-                timestamp: Date.now()
-            }
+        setLoading(true);
 
-            dispatch(addNote(newNote))
-        } else {
-            const editedNote : Note = {
-                id: selectedNote.id,
-                title: noteTitle,
-                content: noteContent,
-                category: noteCategory,
-                timestamp: Date.now()
-            }
-            dispatch(editNote(editedNote))
+        const editedNote : Note = {
+            id: selectedNote.id,
+            title: noteTitle,
+            content: noteContent,
+            category: noteCategory,
+            timestamp: Date.now()
         }
 
-        onDialogClose()
+        if (isAdd) {
+            editedNote.id = uuidv4();
+
+            fetch("https://66478a962bb946cf2f9e19e7.mockapi.io/api/v1/notes/notes", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(editedNote)
+            }).then(response => response.json())
+                .then(() => {
+                    setLoading(false);
+                    dispatch(addNote(editedNote))
+                    onDialogClose()
+                }).catch(error => {
+                    setErrorMessage(error.message);
+                }
+            )
+        } else {
+            fetch("https://66478a962bb946cf2f9e19e7.mockapi.io/api/v1/notes/notes/" + editedNote.id, {
+                method: "PUT",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(editedNote)
+            }).then(response => response.json())
+                .then(() => {
+                    setLoading(false);
+                    dispatch(editNote(editedNote))
+                    onDialogClose()
+                }).catch(error => {
+                    setErrorMessage(error.message);
+                }
+            )
+        }
     }
 
     const onNoteDelete = () => {
-        dispatch(removeNote(selectedNote.id))
-        onDialogClose()
+        setLoading(true);
+        fetch("https://66478a962bb946cf2f9e19e7.mockapi.io/api/v1/notes/notes/" + selectedNote.id, {
+            method: "DELETE"
+        }).then(() => {
+            setLoading(false);
+            dispatch(removeNote(selectedNote.id))
+            onDialogClose()
+        }).catch(error => {
+            setErrorMessage(error.message);
+        })
     }
 
-    const dialogActionsEdit = [
+    const dialogActionsEdit : Array<DialogAction> = [
         {btnTitle: "Save", btnPriority: "primary", btnCallback: onNoteSave},
         {btnTitle: "Delete", btnPriority: "error", btnCallback: onNoteDelete},
         {btnTitle: "Cancel", btnPriority: "secondary", btnCallback: onDialogClose}
     ]
 
-    const dialogActionsAdd = [
+    const dialogActionsAdd : Array<DialogAction> = [
         {btnTitle: "Add", btnPriority: "primary", btnCallback: onNoteSave},
         {btnTitle: "Cancel", btnPriority: "secondary", btnCallback: onDialogClose}
     ]
 
     return (
-        <MaterialDialog cancellable={true} onClose={onDialogClose} dialogActions={isAdd ? dialogActionsAdd : dialogActionsEdit} primaryButtonIsEnabled={!saveIsDisabled}>
-            <MaterialTextInputEditText value={noteTitle} onChange={(e) => {
-                setNoteTitle(e.target.value)
-            }}/>
-            <MaterialTextInputEditText value={noteContent} onChange={(e) => {
-                setNoteContent(e.target.value)
-            }}/>
-            <MaterialTextInputEditText value={noteCategory} onChange={(e) => {
-                setNoteCategory(e.target.value)
-            }}/>
-        </MaterialDialog>
+        <>
+            {loading ? <LoadingScreen/> : null}
+
+            {errorMessage !== "" ? <MaterialDialog onClose={() => setErrorMessage("")} dialogTitle={"Server error"} dialogActions={[{
+                btnTitle: "Close",
+                btnPriority: "primary",
+                btnCallback: () => setErrorMessage("")
+            }]}>{errorMessage}</MaterialDialog> :
+                <MaterialDialog cancellable={true} onClose={onDialogClose} dialogActions={isAdd ? dialogActionsAdd : dialogActionsEdit} primaryButtonIsEnabled={!saveIsDisabled}>
+                    <MaterialTextInputEditText value={noteTitle} onChange={(e) => {
+                        setNoteTitle(e.target.value)
+                    }}/>
+                    <MaterialTextInputEditText value={noteContent} onChange={(e) => {
+                        setNoteContent(e.target.value)
+                    }}/>
+                    <MaterialTextInputEditText value={noteCategory} onChange={(e) => {
+                        setNoteCategory(e.target.value)
+                    }}/>
+                </MaterialDialog>
+            }
+        </>
     );
 }
 

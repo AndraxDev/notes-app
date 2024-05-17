@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *****************************************************************/
+import {NoteArray} from "./notesSlice";
 
 // This is a draft for the database of notes intended for offline-testing. You can safely ignore this file.
 
-export const TestNotes : Array<{id: string, title: string, content: string, category: string, timestamp: number}> = [
+export const TestNotes : NoteArray = [
     {
         id: "00000000-0000-0000-0000-000000000000",
         title: "First note",

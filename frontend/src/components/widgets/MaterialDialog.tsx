@@ -28,6 +28,12 @@ import {
 } from "./MaterialButtons";
 import {uuidv4} from "../../util/UUID";
 
+export type DialogAction = {
+    btnTitle: string,
+    btnPriority: string,
+    btnCallback: any
+}
+
 MaterialDialog.propTypes = {
     cancellable: PropTypes.bool, // Dialog can be cancelled by clicking outside
     onClose: PropTypes.func, // Dialog close callback
@@ -42,10 +48,9 @@ function MaterialDialog({cancellable, onClose, dialogTitle, children, dialogActi
     onClose: any,
     dialogTitle?: string,
     children?: ReactNode,
-    dialogActions?: Array<{ btnTitle: string, btnPriority: string, btnCallback: any }>,
+    dialogActions?: Array<DialogAction>,
     primaryButtonIsEnabled?: boolean,
 }>) {
-
     const getButton = (btnTitle: string, btnPriority: string, btnCallback: any) : ReactNode => {
         const key = uuidv4()
 

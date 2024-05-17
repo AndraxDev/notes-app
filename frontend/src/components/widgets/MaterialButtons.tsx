@@ -28,7 +28,7 @@ import Button from '@mui/material/Button';
 import '../../theme/colors.css'
 
 // This is a template to reduce amount of code
-const MaterialButtonTemplate = styled(Button)(({ theme }) => ({
+const MaterialButtonTemplate = styled(Button)(() => ({
     textTransform: "none",
     borderRadius: "24px",
     paddingLeft: "12px",
@@ -42,7 +42,7 @@ const MaterialButtonTemplate = styled(Button)(({ theme }) => ({
     },
 }));
 
-export const MaterialButtonFilled = styled(MaterialButtonTemplate)(({ theme }) => ({
+export const MaterialButtonFilled = styled(MaterialButtonTemplate)(() => ({
     color: "var(--color-accent-50)",
     backgroundColor: "var(--color-accent-800)",
     border: "1px solid var(--color-accent-800)",
@@ -58,7 +58,7 @@ export const MaterialButtonFilled = styled(MaterialButtonTemplate)(({ theme }) =
     },
 }));
 
-export const MaterialButtonTonal = styled(MaterialButtonTemplate)(({ theme }) => ({
+export const MaterialButtonTonal = styled(MaterialButtonTemplate)(() => ({
     color: "var(--color-accent-800)",
     backgroundColor: "var(--color-accent-300)",
     border: "1px solid var(--color-accent-300)",
@@ -68,7 +68,7 @@ export const MaterialButtonTonal = styled(MaterialButtonTemplate)(({ theme }) =>
     },
 }));
 
-export const MaterialButtonOutlined = styled(MaterialButtonTemplate)(({ theme }) => ({
+export const MaterialButtonOutlined = styled(MaterialButtonTemplate)(() => ({
     color: "var(--color-accent-800)",
     borderColor: "var(--color-accent-800)",
     border: "1px solid var(--color-accent-800)",
@@ -79,7 +79,7 @@ export const MaterialButtonOutlined = styled(MaterialButtonTemplate)(({ theme })
     },
 }));
 
-export const MaterialButtonCard = styled(Button)(({ theme }) => ({
+export const MaterialButtonCard = styled(Button)(() => ({
     color: "var(--color-accent-800)",
     backgroundColor: "var(--color-accent-200)",
     borderRadius: "24px",
@@ -92,15 +92,7 @@ export const MaterialButtonCard = styled(Button)(({ theme }) => ({
     },
 }));
 
-export const MaterialButtonTonalIcon = styled(MaterialButtonTemplate)(({ theme }) => ({
-    color: "var(--color-accent-800)",
-    backgroundColor: "var(--color-accent-200)",
-    '&:hover': {
-        backgroundColor: "var(--color-accent-300)",
-    },
-}));
-
-export const MaterialButtonError = styled(MaterialButtonTemplate)(({ theme }) => ({
+export const MaterialButtonError = styled(MaterialButtonTemplate)(() => ({
     color: "var(--color-warn)",
     backgroundColor: "rgba(255,103,103,0.2)",
     textTransform: "none",

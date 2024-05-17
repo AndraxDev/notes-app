@@ -28,20 +28,42 @@ export type Note = {
     timestamp: number
 }
 
+export type NoteArray = Array<Note>
+
+type NoteValue = {
+    value : NoteArray
+}
+
+type NoteState = {
+    notes : NoteValue
+}
+
+type NoteAction = {
+    payload : Note
+}
+
+type StringAction = {
+    payload : string
+}
+
+type IdAction = {
+    id : string
+}
+
 export const notesSlice = createSlice({
     name: 'notes',
     initialState: {
         value: [],
     },
     reducers: {
-        addNote: (state: {value: Array<Note>}, action: {payload : Note}) => {
+        addNote: (state: NoteValue, action: NoteAction) => {
             state.value.push(action.payload)
         },
-        removeNote: (state, action : {payload : string}) => {
-            state.value = state.value.filter((note: { id: string }) => note.id !== action.payload)
+        removeNote: (state, action : StringAction) => {
+            state.value = state.value.filter((note: IdAction) => note.id !== action.payload)
         },
-        editNote: (state: any, action: {payload : Note}) => {
-            state.value = state.value.map((note: { id: string }) => {
+        editNote: (state: any, action: NoteAction) => {
+            state.value = state.value.map((note: IdAction) => {
                 if (note.id === action.payload.id) {
                     return {
                         ...note,
@@ -60,16 +82,12 @@ export const notesSlice = createSlice({
 // Action creators are generated for each case reducer function
 export const { addNote, editNote, removeNote} = notesSlice.actions
 
+/* Selectors */
 export const selectNoteById = (id: string) => createSelector(
-    (state: { notes : { value : Array<Note>}}) => state.notes.value,
+    (state: NoteState) => state.notes.value,
     (notes) => notes.find(note => note.id === id)
 );
 
-export const filterNotesByCategory = (category: string) => createSelector(
-    (state: { notes : { value : Array<Note>}}) => state.notes.value,
-    (notes) => notes.filter(note => note.category === category)
-);
-
-export const getAllNotes = () => (state: { notes : { value : Array<Note>}}) => state.notes.value;
+export const getAllNotes = () => (state: NoteState) => state.notes.value;
 
 export default notesSlice.reducer

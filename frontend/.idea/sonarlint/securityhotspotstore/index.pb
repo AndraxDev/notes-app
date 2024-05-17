@@ -43,3 +43,5 @@ L
 src/components/NotesList.tsx,0\6\0687fb218baabf927cac0ed75b8fc80580821000
 A
 src/util/UUID.tsx,9\d\9d949c196cbae25d8e44773510ded85e72831ade
+X
+(src/components/widgets/LoadingScreen.tsx,e\7\e72c51e99e0583a900c5fcf6d8d3f7dd0111cd03

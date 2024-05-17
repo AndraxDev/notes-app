@@ -16,22 +16,25 @@
 
 import React, {useEffect} from 'react';
 import NotesList from "./NotesList";
-import {addNote, getAllNotes, Note} from "../notesSlice";
+import {addNote, getAllNotes, Note, NoteArray} from "../notesSlice";
 import {useDispatch, useSelector} from "react-redux";
 import NoteEditDialog from "./NoteEditDialog";
 import {MaterialButtonFilled} from "./widgets/MaterialButtons";
 import {MaterialTextInputEditText} from "./widgets/MaterialTextInputEditText";
+import LoadingScreen from "./widgets/LoadingScreen";
+import MaterialDialog from "./widgets/MaterialDialog";
 
 function Home() {
     const dispatch = useDispatch();
     const noteSelector= getAllNotes();
     const ns = useSelector(noteSelector);
 
-    const [notes, setNotes] : [Array<Note>, any] = React.useState([]);
+    const [notes, setNotes] : [NoteArray, any] = React.useState([]);
     const [searchQuery, setSearchQuery] : [string, any] = React.useState("");
     const [categoryFilter, setCategoryFilter] : [string, any] = React.useState("");
     const [addDialogOpen, setAddDialogOpen] : [boolean, any] = React.useState(false);
-    const [errorMessages, setErrorMessages] : [string, any] = React.useState("");
+    const [errorMessage, setErrorMessage] : [string, any] = React.useState("");
+    const [loading, setLoading] : [boolean, any] = React.useState(true);
 
     useEffect(() => {
         fetch("https://66478a962bb946cf2f9e19e7.mockapi.io/api/v1/notes/notes")
@@ -40,9 +43,12 @@ function Home() {
                 data.forEach(note => {
                     dispatch(addNote(note))
                 })
-        }).catch(error => {
-            setErrorMessages(error.message);
-        })
+
+                setLoading(false);
+            }).catch(error => {
+                setErrorMessage(error.message);
+                setLoading(false);
+            })
         // eslint-disable-next-line
     }, []);
 
@@ -52,7 +58,16 @@ function Home() {
 
     return (
         <div>
+            {loading ? <LoadingScreen/> : null}
+
+            {errorMessage !== "" ? <MaterialDialog onClose={() => setErrorMessage("")} dialogTitle={"Server error"} dialogActions={[{
+                btnTitle: "Close",
+                btnPriority: "primary",
+                btnCallback: () => setErrorMessage("")
+            }]}>{errorMessage}</MaterialDialog> : null}
+
             {addDialogOpen ? <NoteEditDialog onClose={() => setAddDialogOpen(false)} id={""} isAdd={true}/> : null}
+
             <MaterialButtonFilled onClick={() => setAddDialogOpen(true)}>Add Note</MaterialButtonFilled>
             <MaterialTextInputEditText label={"Search"} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}/>
             <MaterialTextInputEditText label={"Category"} value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)}/>

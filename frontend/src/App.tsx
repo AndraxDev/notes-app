@@ -15,7 +15,6 @@
  *****************************************************************/
 
 import React from 'react';
-import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Home from "./components/Home";
 import {createTheme, ThemeProvider} from "@mui/material";
 import {BaseTheme} from "./theme/Theme";
@@ -25,13 +24,7 @@ function App() {
 
     return (
         <ThemeProvider theme={baseTheme}>
-            <div> {/* <-- This <div> is a UI wrapper so all windows (pages) have the same appearance without duplicating code */}
-                <BrowserRouter>
-                    <Routes>
-                        <Route path="/" element={<Home />} />
-                    </Routes>
-                </BrowserRouter>
-            </div>
+            <Home />
         </ThemeProvider>
     );
 }
