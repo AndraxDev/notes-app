@@ -5,39 +5,48 @@
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
+    <link rel="stylesheet" href="/preload.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <!-- I think this app will not be only "skill test" but it will become a small my product along with SpeakGPT,
+    so I put Google Analytics here -->
+    <link rel="preconnect" href="https://www.googletagmanager.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> <!-- Material style is not material without Roboto font -->
     <meta
       name="description"
-      content="Web site created using create-react-app"
+      content="Simple notes app built with Material 3 components."
     />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
+    <title>Material 3 Notes App</title>
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>React App</title>
+    <!-- Google tag (gtag.js), Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1J7MGCKC6L"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-1J7MGCKC6L');
+    </script>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
+    <noscript>
+        <!-- Inform user thy need to enable JavaScript in more convenient way that Create React App does. -->
+        <div class="loader">
+            <img src="/logo192.png" alt="M3 Notes" class="app-logo-preload" />
+            <h1 class="app-title-preload">M3 Notes</h1>
+            <p class="app-text">Please enable JavaScript to run this app.</p>
+        </div>
+    </noscript>
+    <div id="root">
+        <!-- Before React render page and replace all contents in this container, we placed
+        loading indicator to improve user experience and let users know that app is not stuck and
+        server is up :) -->
+        <div class="loader">
+            <img src="/logo192.png" alt="M3 Notes" class="app-logo-preload" />
+            <h1 class="app-title-preload">M3 Notes</h1>
+            <progress class="pure-material-progress-linear"></progress>
+        </div>
+    </div>
   </body>
 </html>
