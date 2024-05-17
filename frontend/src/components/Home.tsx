@@ -16,10 +16,10 @@
 
 import React, {useEffect} from 'react';
 import NotesList from "./NotesList";
-import {addNote, getAllNotes, Note, NoteArray} from "../notesSlice";
+import {addNote, clearAllNotes, getAllNotes, Note, NoteArray} from "../notesSlice";
 import {useDispatch, useSelector} from "react-redux";
 import NoteEditDialog from "./NoteEditDialog";
-import {MaterialButtonFilled} from "./widgets/MaterialButtons";
+import {FloatingActionButton} from "./widgets/MaterialButtons";
 import {MaterialTextInputEditText} from "./widgets/MaterialTextInputEditText";
 import LoadingScreen from "./widgets/LoadingScreen";
 import MaterialDialog from "./widgets/MaterialDialog";
@@ -39,6 +39,7 @@ function Home() {
     const [loading, setLoading] : [boolean, any] = React.useState(true);
 
     useEffect(() => {
+        dispatch(clearAllNotes());
         fetch("https://66478a962bb946cf2f9e19e7.mockapi.io/api/v1/notes/notes")
             .then(response => response.json())
             .then((data: Array<Note>) => {
@@ -70,21 +71,27 @@ function Home() {
 
             {addDialogOpen ? <NoteEditDialog onClose={() => setAddDialogOpen(false)} id={""} isAdd={true}/> : null}
 
-            <MaterialButtonFilled onClick={() => setAddDialogOpen(true)}>Add Note</MaterialButtonFilled>
-            <MaterialTextInputEditText label={"Search"} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}/>
-            <MaterialTextInputEditText
-                label={"Category"}
-                value={categoryFilter}
-                onChange={(e) => setCategoryFilter(e.target.value)}
-                select
-            >
-                {[{value: ALL_CATEGORIES, label: ALL_CATEGORIES}, ...Categories].map((option: Category) => (
-                    <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                    </MenuItem>
-                ))}
-            </MaterialTextInputEditText>
-            <h1>M3 Notes</h1>
+            <div className={"fab"}>
+                <FloatingActionButton onClick={() => setAddDialogOpen(true)}><span className={"material-symbols-outlined"}>add</span>&nbsp;&nbsp;&nbsp;Add Note</FloatingActionButton>
+            </div>
+
+            <h1 className={"app-title"}>M3 Notes</h1>
+            <div className={"search-container"}>
+                <MaterialTextInputEditText className={"w75"} variant={"filled"} label={"Search"} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}/>
+                <MaterialTextInputEditText className={"w25"} variant={"filled"}
+                                           label={"Category"}
+                                           value={categoryFilter}
+                                           onChange={(e) => setCategoryFilter(e.target.value)}
+                                           select
+                >
+                    {[{value: ALL_CATEGORIES, label: ALL_CATEGORIES, color: "var(--color-accent-800)",
+                        colorTint: "var(--color-accent-300)"}, ...Categories].map((option: Category) => (
+                        <MenuItem key={option.value} value={option.value}>
+                            {option.label}
+                        </MenuItem>
+                    ))}
+                </MaterialTextInputEditText>
+            </div>
             <NotesList notes={notes} searchQuery={searchQuery} categoryFilter={categoryFilter}/>
         </div>
     );

@@ -20,7 +20,9 @@ export const NO_CATEGORY = "-- No category --";
 
 export type Category = {
     value: string,
-    label: string
+    label: string,
+    color: string,
+    colorTint: string
 };
 
 export type CategoryArray = Array<Category>;
@@ -28,26 +30,38 @@ export type CategoryArray = Array<Category>;
 export const Categories: CategoryArray = [
     {
         value: NO_CATEGORY,
-        label: NO_CATEGORY
+        label: NO_CATEGORY,
+        color: "var(--color-accent-800)",
+        colorTint: "var(--color-accent-300)"
     },
     {
         value: "General",
-        label: "General"
+        label: "General",
+        color: "#FFC107",
+        colorTint: "rgba(255,193,7,0.16)"
     },
     {
         value: "Work",
-        label: "Work"
+        label: "Work",
+        color: "#2196F3",
+        colorTint: "rgba(33,150,243,0.16)"
     },
     {
         value: "Personal",
-        label: "Personal"
+        label: "Personal",
+        color: "#4CAF50",
+        colorTint: "rgba(76,175,80,0.16)"
     },
     {
         value: "School",
-        label: "School"
+        label: "School",
+        color: "#FF5722",
+        colorTint: "rgba(255,87,34,0.16)"
     },
     {
         value: "Other",
-        label: "Other"
+        label: "Other",
+        color: "#9E9E9E",
+        colorTint: "rgba(158,158,158,0.16)"
     }
 ]

@@ -25,7 +25,7 @@ import LoadingScreen from "./widgets/LoadingScreen";
 import {MenuItem} from "@mui/material";
 import {Categories, Category, DEFAULT_CATEGORY, NO_CATEGORY} from "../util/Categories";
 
-const MAX_TITLE_LENGTH = 100;
+const MAX_TITLE_LENGTH = 70;
 const MAX_CONTENT_LENGTH = 1000;
 
 NoteEditDialog.propTypes = {
@@ -103,6 +103,7 @@ function NoteEditDialog({onClose, id, isAdd} : Readonly<{onClose: any, id: strin
         }
 
         validateForm()
+        // eslint-disable-next-line
     }, [noteTitle, noteContent, noteCategory, selectedNote, isAdd, note]);
 
     const onDialogClose = () => {
@@ -206,7 +207,7 @@ function NoteEditDialog({onClose, id, isAdd} : Readonly<{onClose: any, id: strin
                     }]} priority={"high"}>{`Are you sure you want to delete the note "${selectedNote.title}"?`}</MaterialDialog> : null}
 
                     {/* Dialog contents go here */}
-                    <MaterialTextInputEditText fullWidth label={"title"} value={noteTitle} onChange={(e) => {
+                    <MaterialTextInputEditText fullWidth label={"Title"} value={noteTitle} onChange={(e) => {
                         setNoteTitle(e.target.value)
                     }} helperText={noteTitle.length.toString() + "/" + MAX_TITLE_LENGTH.toString()}/>
                     <br/><br/>
@@ -221,7 +222,9 @@ function NoteEditDialog({onClose, id, isAdd} : Readonly<{onClose: any, id: strin
                     }} select>
                         {[{
                             value: DEFAULT_CATEGORY,
-                            label: DEFAULT_CATEGORY
+                            label: DEFAULT_CATEGORY,
+                            color: "var(--color-accent-800)",
+                            colorTint: "var(--color-accent-300)"
                         }, ...Categories].map((option: Category) => (
                             <MenuItem key={option.value} value={option.value}>
                                 {option.label}

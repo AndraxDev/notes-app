@@ -23,7 +23,7 @@ import { styled } from '@mui/material/styles';
 import '../../theme/colors.css'
 import {TextField} from "@mui/material";
 
-export const MaterialTextInputEditText = styled(TextField)(({ theme }) => ({
+export const MaterialTextInputEditText = styled(TextField)(() => ({
     '&': {
         width: "100%"
     },

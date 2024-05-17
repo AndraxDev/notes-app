@@ -47,3 +47,5 @@ X
 (src/components/widgets/LoadingScreen.tsx,e\7\e72c51e99e0583a900c5fcf6d8d3f7dd0111cd03
 G
 src/util/Categories.tsx,2\3\23509fbe7be73a38ebe8f3286459346c9eb43bbd
+<
+src/logo.svg,6\d\6d3a8cd532ece5b4ddbd4b3b6a678ba686d300bc

@@ -56,6 +56,9 @@ export const notesSlice = createSlice({
         value: [],
     },
     reducers: {
+        clearAllNotes: (state: NoteValue) => {
+            state.value = []
+        },
         addNote: (state: NoteValue, action: NoteAction) => {
             state.value.push(action.payload)
         },
@@ -80,7 +83,7 @@ export const notesSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { addNote, editNote, removeNote} = notesSlice.actions
+export const { clearAllNotes, addNote, editNote, removeNote} = notesSlice.actions
 
 /* Selectors */
 export const selectNoteById = (id: string) => createSelector(

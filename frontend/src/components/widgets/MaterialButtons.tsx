@@ -58,6 +58,22 @@ export const MaterialButtonFilled = styled(MaterialButtonTemplate)(() => ({
     },
 }));
 
+export const FloatingActionButton = styled(MaterialButtonTemplate)(() => ({
+    color: "var(--color-accent-50)",
+    backgroundColor: "var(--color-accent-800)",
+    textTransform: "none",
+    borderRadius: "16px",
+    paddingLeft: "12px",
+    paddingRight: "12px",
+    fontSize: "14px",
+    height: "56px",
+    boxSizing: "border-box",
+    verticalAlign: "middle",
+    '&:hover': {
+        backgroundColor: "var(--color-accent-900)",
+    },
+}));
+
 export const MaterialButtonTonal = styled(MaterialButtonTemplate)(() => ({
     color: "var(--color-accent-800)",
     backgroundColor: "var(--color-accent-300)",
@@ -79,16 +95,19 @@ export const MaterialButtonOutlined = styled(MaterialButtonTemplate)(() => ({
     },
 }));
 
-export const MaterialButtonCard = styled(Button)(() => ({
+// @ts-ignore
+export const MaterialButtonCard = styled(MaterialButtonTemplate)(() => ({
     color: "var(--color-accent-800)",
-    backgroundColor: "var(--color-accent-200)",
-    borderRadius: "24px",
+    backgroundColor: "var(--color-accent-100)",
+    border: "1px solid rgba(255, 255, 255, 0.1)",
+    borderRadius: "16px",
     textTransform: "none",
     width: "260px",
     height: "260px",
     verticalAlign: "middle",
     '&:hover': {
-        backgroundColor: "var(--color-accent-300)",
+        backgroundColor: "var(--color-accent-200)",
+        border: "1px solid rgba(255, 255, 255, 0.1)"
     },
 }));
 

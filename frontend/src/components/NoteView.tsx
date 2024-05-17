@@ -18,6 +18,7 @@ import React from 'react';
 import PropTypes from "prop-types";
 import {MaterialButtonCard} from "./widgets/MaterialButtons";
 import {Note} from "../notesSlice";
+import {Categories} from "../util/Categories";
 
 NoteView.propTypes = {
     note: PropTypes.shape({
@@ -31,12 +32,30 @@ NoteView.propTypes = {
 }
 
 function NoteView({note, selectNote} : Readonly<{note: Note, selectNote: any}>) {
+
+    const getCategoryColor = (category: string) => {
+        return Categories.find(c => c.value === category)?.color;
+    }
+
+    const getCategoryColorTint = (category: string) => {
+        return Categories.find(c => c.value === category)?.colorTint;
+    }
+
     return (
         <MaterialButtonCard onClick={() => selectNote(note.id)}>
-            <p>{note.title}</p>
-            <p>{note.content}</p>
-            <p>{note.category}</p>
-            <p>{(new Date(note.timestamp)).toLocaleString()}</p>
+            <div className={"card"}>
+                <div>
+                    <p className={"card-title"}>{note.title}</p>
+                    <p className={"card-content"}>{note.content}</p>
+                </div>
+                <div className={"card-footer"}>
+                    <p className={"card-tag"} style={{
+                        color: getCategoryColor(note.category),
+                        backgroundColor: getCategoryColorTint(note.category)
+                    }}>{note.category}</p>
+                    <p className={"card-time"}>{(new Date(note.timestamp)).toLocaleString()}</p>
+                </div>
+            </div>
         </MaterialButtonCard>
     );
 }

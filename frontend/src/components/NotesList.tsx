@@ -56,14 +56,14 @@ function NotesList({notes, searchQuery, categoryFilter} : Readonly<{notes: NoteA
             setNotesProjection(notesCopy);
         } else {
             let filteredNotes = notes.filter(note => {
-                if (categoryFilter.trim() !== "" && categoryFilter.trim() !== ALL_CATEGORIES && searchQuery.trim() !== "") {
+                if (categoryFilter.trim() === ALL_CATEGORIES && searchQuery.trim() !== "") {
+                    return note.title.toLowerCase().includes(searchQuery.toLowerCase()) || note.content.toLowerCase().includes(searchQuery.toLowerCase());
+                } else if (categoryFilter.trim() !== ALL_CATEGORIES && searchQuery.trim() !== "") {
                     return note.category.toLowerCase() === categoryFilter.toLowerCase() && (note.title.toLowerCase().includes(searchQuery.toLowerCase()) || note.content.toLowerCase().includes(searchQuery.toLowerCase()));
-                } else if (categoryFilter.trim() !== "" && categoryFilter.trim() === ALL_CATEGORIES) {
-                    return note.category.toLowerCase() === categoryFilter.toLowerCase();
-                } else if (searchQuery.trim() !== "") {
-                    return note.title.includes(searchQuery) || note.content.toLowerCase().includes(searchQuery.toLowerCase());
+                } else if (searchQuery.trim() === "" && categoryFilter.trim() !== ALL_CATEGORIES) {
+                    return note.category.toLowerCase() === categoryFilter.toLowerCase()
                 } else {
-                    return false;
+                    return true;
                 }
             });
 
@@ -80,12 +80,12 @@ function NotesList({notes, searchQuery, categoryFilter} : Readonly<{notes: NoteA
     }, [notes, categoryFilter, searchQuery]);
 
     return (
-        <>
+        <div className={"grid-list"}>
             {editDialogOpen ? <NoteEditDialog onClose={() => setEditDialogOpen(false)} id={selectedNoteId} isAdd={false}/> : null}
             {notesProjection.map(note => (
                 <NoteView note={note} selectNote={onNoteSelect} key={note.id}/>
             ))}
-        </>
+        </div>
     );
 }
 

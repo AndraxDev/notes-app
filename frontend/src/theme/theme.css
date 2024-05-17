@@ -29,8 +29,30 @@
     color-scheme: dark;
 }
 
+/* Scrollbar styles */
+::-webkit-scrollbar {
+    width: 16px;
+    height: 16px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.07);
+    border-radius: 16px;
+    border: 4px solid transparent;
+    background-clip: padding-box;
+    min-height: 100px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
 html, body {
-    background-color: var(--color-accent-200);
+    background-color: var(--color-accent-100);
     overscroll-behavior: none; /* Make mobile app "more native" by disabling scroll to avoid accidental page reloads while scrolling page */
     overflow: hidden;
 
@@ -51,10 +73,32 @@ html, body {
             'opsz' 24
 }
 
-/* Disable irritating blue highlight. In Material UI tap and clicks are indicated by ripple animation so this change should not affect user experience */
+/* Disable irritating blue highlight. In Material UI tap and clicks are indicated by
+ripple animation so this change should not affect user experience */
 a, div, button {
     -webkit-tap-highlight-color: transparent;
     -webkit-touch-callout: none;
+}
+
+/* This container will take 75% width. Works better with display: flex, flex-direction: row, flex-wrap: nowrap */
+.w75 {
+    width: 75%;
+    flex: 3;
+}
+
+/* This container will take 25% width. Works better with display: flex, flex-direction: row, flex-wrap: nowrap */
+.w25 {
+    width: 25%;
+    flex: 1;
+}
+
+.app-title {
+    font-size: 24px;
+    color: var(--color-accent-900);
+    margin-top: 24px;
+    margin-bottom: 24px;
+    width: 100%;
+    text-align: center;
 }
 
 /* FLOATING ACTION BUTTON STYLES */
@@ -64,6 +108,9 @@ a, div, button {
     margin: 0;
     z-index: 52;
     user-select: none;
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
 }
 
 /* MATERIAL DIALOG STYLES */
@@ -134,4 +181,78 @@ a, div, button {
     max-height: calc(100vh - 300px);
     overflow-y: scroll;
     overflow-x: hidden;
+}
+
+/* MATERIAL CARDS */
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+}
+
+.card-title {
+    width: 100%;
+    text-align: start;
+    overflow: hidden;
+    display: -webkit-box;
+    font-size: 18px;
+    padding: 0;
+    margin: 4px 0;
+    line-clamp: 1;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+}
+
+.card-content {
+    overflow: hidden;
+    display: -webkit-box;
+    text-align: start;
+    padding: 0;
+    margin: 0;
+    color: var(--color-primary-light);
+    line-clamp: 4;
+        -webkit-line-clamp: 4;
+        -webkit-box-orient: vertical;
+}
+
+.card-footer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: end;
+    gap: 8px;
+}
+
+.card-tag {
+    padding: 4px 12px;
+    margin: 0;
+    background-color: var(--color-accent-300);
+    border-radius: 24px;
+}
+
+.card-time {
+    padding: 0;
+    margin: 0;
+    color: var(--color-accent-500);
+}
+
+/* OTHER STUFF */
+.search-container {
+    display: flex;
+    flex-direction: row;
+    width: calc(100% - 96px);
+    margin: 24px 48px;
+    gap: 24px;
+}
+
+.grid-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 24px;
+    height: calc(100vh - 160px);
+    overflow-y: auto;
 }
