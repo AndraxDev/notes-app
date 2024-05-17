@@ -19,7 +19,7 @@
 * Each note have an id, title, and content.
 * */
 import {createSelector, createSlice} from '@reduxjs/toolkit'
-import {RootState} from "@reduxjs/toolkit/query";
+import {uuidv4} from "./util/UUID";
 
 export const notesSlice = createSlice({
     name: 'notes',
@@ -27,37 +27,45 @@ export const notesSlice = createSlice({
         value: [],
     },
     reducers: {
-        addNote: (state: {value: Array<{ id: string, title: string, content: string }>}, action: {payload : { id: string, title: string, content: string }}) => {
-            state.value.push(action.payload)
+        addNote: (state: {value: Array<{ title: string, content: string, category: string }>}, action: {payload : { title: string, content: string, category: string }}) => {
+            const note = {
+                id: uuidv4(),
+                ...action.payload
+            }
+            state.value.push(note)
         },
         removeNote: (state, action : {payload : string}) => {
             state.value = state.value.filter((note: { id: string }) => note.id !== action.payload)
         },
-        editNote: (state: any, action: {payload : { id: string, title: string, content: string }}) => {
+        editNote: (state: any, action: {payload : { id: string, title: string, content: string, category: string }}) => {
             state.value = state.value.map((note: { id: string }) => {
                 if (note.id === action.payload.id) {
                     return {
                         ...note,
-                        title: action.payload.title
+                        title: action.payload.title,
+                        content: action.payload.content,
+                        category: action.payload.category
                     }
                 }
                 return note
             })
-        },
-        getNoteById: (state: any, action: { payload: string }) => {
-            return state.value.find((note: { id: string }) => note.id === action.payload)
         }
     },
 })
 
 // Action creators are generated for each case reducer function
-export const { addNote, editNote, removeNote, getNoteById} = notesSlice.actions
-
-export const selectNote = (state : { notes : { value : { id: string, title: string, content: string }}}) => state.notes.value
+export const { addNote, editNote, removeNote} = notesSlice.actions
 
 export const selectNoteById = (id: string) => createSelector(
-    (state: { notes : { value : Array<{ id: string, title: string, content: string }>}}) => state.notes.value,
+    (state: { notes : { value : Array<{ id: string, title: string, content: string, category: string }>}}) => state.notes.value,
     (notes) => notes.find(note => note.id === id)
 );
+
+export const filterNotesByCategory = (category: string) => createSelector(
+    (state: { notes : { value : Array<{ id: string, title: string, content: string, category: string }>}}) => state.notes.value,
+    (notes) => notes.filter(note => note.category === category)
+);
+
+export const getAllNotes = () => (state: { notes : { value : Array<{ id: string, title: string, content: string, category: string }>}}) => state.notes.value;
 
 export default notesSlice.reducer

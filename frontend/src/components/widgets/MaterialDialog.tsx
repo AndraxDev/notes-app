@@ -26,7 +26,7 @@ import {
     MaterialButtonOutlined,
     MaterialButtonTonal
 } from "./MaterialButtons";
-import {uuid} from "uuidv4";
+import {uuidv4} from "../../util/UUID";
 
 MaterialDialog.propTypes = {
     cancellable: PropTypes.bool, // Dialog can be cancelled by clicking outside
@@ -37,15 +37,15 @@ MaterialDialog.propTypes = {
 }
 
 function MaterialDialog({cancellable, onClose, dialogTitle, children, dialogActions} : Readonly<{
-    cancellable: boolean,
+    cancellable?: boolean,
     onClose: any,
-    dialogTitle: string,
-    children: ReactNode,
-    dialogActions: Array<{ btnTitle: string, btnPriority: string, btnCallback: any }>
+    dialogTitle?: string,
+    children?: ReactNode,
+    dialogActions?: Array<{ btnTitle: string, btnPriority: string, btnCallback: any }>
 }>) {
 
     const getButton = (btnTitle: string, btnPriority: string, btnCallback: any) : ReactNode => {
-        const key = uuid()
+        const key = uuidv4()
 
         if (btnPriority === "primary") {
             return <MaterialButtonFilled key={key} onClick={btnCallback}>{btnTitle}</MaterialButtonFilled>
@@ -66,12 +66,12 @@ function MaterialDialog({cancellable, onClose, dialogTitle, children, dialogActi
             }
         }}>
             <div className={"dialog-paper"} onMouseDown={(e) => e.stopPropagation()}>
-                {dialogTitle === null ? null : <h1 className={"dialog-title"}>{dialogTitle}</h1>}
+                {dialogTitle === undefined ? null : <h1 className={"dialog-title"}>{dialogTitle}</h1>}
                 <div>
                     {children}
                 </div>
                 <div className={"dialog-actions"}>
-                    {dialogActions !== null ? dialogActions.map((action: { btnTitle: string, btnPriority: string, btnCallback: any }) => {
+                    {dialogActions !== undefined ? dialogActions.map((action: { btnTitle: string, btnPriority: string, btnCallback: any }) => {
                         return getButton(action.btnTitle, action.btnPriority, action.btnCallback)
                     }) : null}
                 </div>
