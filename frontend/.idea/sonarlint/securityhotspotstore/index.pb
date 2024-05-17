@@ -45,3 +45,5 @@ A
 src/util/UUID.tsx,9\d\9d949c196cbae25d8e44773510ded85e72831ade
 X
 (src/components/widgets/LoadingScreen.tsx,e\7\e72c51e99e0583a900c5fcf6d8d3f7dd0111cd03
+G
+src/util/Categories.tsx,2\3\23509fbe7be73a38ebe8f3286459346c9eb43bbd

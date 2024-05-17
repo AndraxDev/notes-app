@@ -22,6 +22,8 @@ import MaterialDialog, {DialogAction} from "./widgets/MaterialDialog";
 import {MaterialTextInputEditText} from "./widgets/MaterialTextInputEditText";
 import {uuidv4} from "../util/UUID";
 import LoadingScreen from "./widgets/LoadingScreen";
+import {MenuItem} from "@mui/material";
+import {Categories, Category, DEFAULT_CATEGORY, NO_CATEGORY} from "../util/Categories";
 
 NoteEditDialog.propTypes = {
     onClose: PropTypes.func.isRequired,
@@ -37,10 +39,11 @@ function NoteEditDialog({onClose, id, isAdd} : Readonly<{onClose: any, id: strin
     const [selectedNote, setSelectedNote] : [Note, any] = useState({id: "", title: "", content: "", category: "", timestamp: 0});
     const [noteTitle, setNoteTitle] : [string, any] = useState("");
     const [noteContent, setNoteContent] : [string, any] = useState("");
-    const [noteCategory, setNoteCategory] : [string, any] = useState("");
+    const [noteCategory, setNoteCategory] : [string, any] = useState(NO_CATEGORY);
     const [saveIsDisabled, setSaveIsDisabled] : [boolean, any] = useState(true);
-    const [loading, setLoading] : [boolean, any] = useState(true);
+    const [loading, setLoading] : [boolean, any] = useState(false);
     const [errorMessage, setErrorMessage] : [string, any] = useState("");
+    const [deletionConfirmation, setDeletionConfirmation] : [boolean, any] = useState(false);
 
     useEffect(() => {
         if (note) {
@@ -71,12 +74,12 @@ function NoteEditDialog({onClose, id, isAdd} : Readonly<{onClose: any, id: strin
         }
 
         if (note !== undefined) {
-            if (noteCategory === "" || noteContent === "" || noteTitle === "" || (noteCategory === note.category && noteContent === note.content && noteTitle === note.title)) {
+            if (noteCategory === "" || noteCategory === DEFAULT_CATEGORY || noteContent === "" || noteTitle === "" || (noteCategory === note.category && noteContent === note.content && noteTitle === note.title)) {
                 setSaveIsDisabled(true);
             } else {
                 setSaveIsDisabled(false);
             }
-        } else if (isAdd && (noteCategory === "" || noteContent === "" || noteTitle === "")) {
+        } else if (isAdd && (noteCategory === "" || noteCategory === DEFAULT_CATEGORY || noteContent === "" || noteTitle === "")) {
             setSaveIsDisabled(true);
         } else if (!isAdd) {
             setSaveIsDisabled(true);
@@ -93,16 +96,16 @@ function NoteEditDialog({onClose, id, isAdd} : Readonly<{onClose: any, id: strin
         setLoading(true);
 
         const editedNote : Note = {
-            id: selectedNote.id,
+            id: note !== undefined && !isAdd ? note.id : uuidv4(),
             title: noteTitle,
             content: noteContent,
             category: noteCategory,
             timestamp: Date.now()
         }
 
-        if (isAdd) {
-            editedNote.id = uuidv4();
+        console.log(editedNote.id)
 
+        if (isAdd) {
             fetch("https://66478a962bb946cf2f9e19e7.mockapi.io/api/v1/notes/notes", {
                 method: "POST",
                 headers: {
@@ -138,48 +141,69 @@ function NoteEditDialog({onClose, id, isAdd} : Readonly<{onClose: any, id: strin
     }
 
     const onNoteDelete = () => {
-        setLoading(true);
-        fetch("https://66478a962bb946cf2f9e19e7.mockapi.io/api/v1/notes/notes/" + selectedNote.id, {
-            method: "DELETE"
-        }).then(() => {
-            setLoading(false);
-            dispatch(removeNote(selectedNote.id))
-            onDialogClose()
-        }).catch(error => {
-            setErrorMessage(error.message);
-        })
+        setDeletionConfirmation(false);
+
+        if (note !== undefined) {
+            setLoading(true);
+            fetch("https://66478a962bb946cf2f9e19e7.mockapi.io/api/v1/notes/notes/" + note.id, {
+                method: "DELETE"
+            }).then(() => {
+                setLoading(false);
+                dispatch(removeNote(note.id))
+                onDialogClose()
+            }).catch(error => {
+                setErrorMessage(error.message);
+            })
+        }
     }
 
     const dialogActionsEdit : Array<DialogAction> = [
-        {btnTitle: "Save", btnPriority: "primary", btnCallback: onNoteSave},
-        {btnTitle: "Delete", btnPriority: "error", btnCallback: onNoteDelete},
-        {btnTitle: "Cancel", btnPriority: "secondary", btnCallback: onDialogClose}
+        {btnTitle: "Cancel", btnPriority: "secondary", btnCallback: onDialogClose},
+        {btnTitle: "Delete", btnPriority: "error", btnCallback: () => setDeletionConfirmation(true)},
+        {btnTitle: "Save", btnPriority: "primary", btnCallback: onNoteSave}
     ]
 
     const dialogActionsAdd : Array<DialogAction> = [
-        {btnTitle: "Add", btnPriority: "primary", btnCallback: onNoteSave},
-        {btnTitle: "Cancel", btnPriority: "secondary", btnCallback: onDialogClose}
+        {btnTitle: "Cancel", btnPriority: "secondary", btnCallback: onDialogClose},
+        {btnTitle: "Add", btnPriority: "primary", btnCallback: onNoteSave}
     ]
 
     return (
         <>
-            {loading ? <LoadingScreen/> : null}
-
             {errorMessage !== "" ? <MaterialDialog onClose={() => setErrorMessage("")} dialogTitle={"Server error"} dialogActions={[{
                 btnTitle: "Close",
                 btnPriority: "primary",
                 btnCallback: () => setErrorMessage("")
             }]}>{errorMessage}</MaterialDialog> :
                 <MaterialDialog cancellable={true} onClose={onDialogClose} dialogActions={isAdd ? dialogActionsAdd : dialogActionsEdit} primaryButtonIsEnabled={!saveIsDisabled}>
-                    <MaterialTextInputEditText value={noteTitle} onChange={(e) => {
+                    {/* Controlled elements */}
+                    {loading ? <LoadingScreen/> : null}
+                    {deletionConfirmation ? <MaterialDialog onClose={() => setDeletionConfirmation(false)} dialogTitle={"Delete note"} dialogActions={[{
+                        btnTitle: "Cancel",
+                        btnPriority: "secondary",
+                        btnCallback: () => setDeletionConfirmation(false)
+                    }, {
+                        btnTitle: "Delete",
+                        btnPriority: "primary",
+                        btnCallback: onNoteDelete
+                    }]} priority={"high"}>{`Are you sure you want to delete the note "${selectedNote.title}"?`}</MaterialDialog> : null}
+
+                    {/* Dialog contents go here */}
+                    <MaterialTextInputEditText label={"title"} value={noteTitle} onChange={(e) => {
                         setNoteTitle(e.target.value)
                     }}/>
-                    <MaterialTextInputEditText value={noteContent} onChange={(e) => {
+                    <MaterialTextInputEditText multiline label={"Note"} rows={8} value={noteContent} onChange={(e) => {
                         setNoteContent(e.target.value)
                     }}/>
-                    <MaterialTextInputEditText value={noteCategory} onChange={(e) => {
+                    <MaterialTextInputEditText label={"Category"} value={noteCategory} onChange={(e) => {
                         setNoteCategory(e.target.value)
-                    }}/>
+                    }} select>
+                        {[{value: "-- Select a category --", label: "-- Select a category --"}, ...Categories].map((option: Category) => (
+                            <MenuItem key={option.value} value={option.value}>
+                                {option.label}
+                            </MenuItem>
+                        ))}
+                    </MaterialTextInputEditText>
                 </MaterialDialog>
             }
         </>

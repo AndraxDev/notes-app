@@ -23,6 +23,8 @@ import {MaterialButtonFilled} from "./widgets/MaterialButtons";
 import {MaterialTextInputEditText} from "./widgets/MaterialTextInputEditText";
 import LoadingScreen from "./widgets/LoadingScreen";
 import MaterialDialog from "./widgets/MaterialDialog";
+import {ALL_CATEGORIES, Categories, Category} from "../util/Categories";
+import {MenuItem} from "@mui/material";
 
 function Home() {
     const dispatch = useDispatch();
@@ -31,7 +33,7 @@ function Home() {
 
     const [notes, setNotes] : [NoteArray, any] = React.useState([]);
     const [searchQuery, setSearchQuery] : [string, any] = React.useState("");
-    const [categoryFilter, setCategoryFilter] : [string, any] = React.useState("");
+    const [categoryFilter, setCategoryFilter] : [string, any] = React.useState(ALL_CATEGORIES);
     const [addDialogOpen, setAddDialogOpen] : [boolean, any] = React.useState(false);
     const [errorMessage, setErrorMessage] : [string, any] = React.useState("");
     const [loading, setLoading] : [boolean, any] = React.useState(true);
@@ -70,7 +72,18 @@ function Home() {
 
             <MaterialButtonFilled onClick={() => setAddDialogOpen(true)}>Add Note</MaterialButtonFilled>
             <MaterialTextInputEditText label={"Search"} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}/>
-            <MaterialTextInputEditText label={"Category"} value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)}/>
+            <MaterialTextInputEditText
+                label={"Category"}
+                value={categoryFilter}
+                onChange={(e) => setCategoryFilter(e.target.value)}
+                select
+            >
+                {[{value: ALL_CATEGORIES, label: ALL_CATEGORIES}, ...Categories].map((option: Category) => (
+                    <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                    </MenuItem>
+                ))}
+            </MaterialTextInputEditText>
             <h1>M3 Notes</h1>
             <NotesList notes={notes} searchQuery={searchQuery} categoryFilter={categoryFilter}/>
         </div>

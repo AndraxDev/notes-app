@@ -14,19 +14,40 @@
  * limitations under the License.
  *****************************************************************/
 
-import React from 'react';
-import {CircularProgress} from "@mui/material";
+export const DEFAULT_CATEGORY = "-- Select a category --";
+export const ALL_CATEGORIES = "-- All categories --";
+export const NO_CATEGORY = "-- No category --";
 
-function LoadingScreen() {
-    return (
-        <div className={"priority-max dialog-backdrop"}>
-            <div className="loading-screen">
-                <CircularProgress style={{
-                    color: "var(--color-accent-800)"
-                }}/>
-            </div>
-        </div>
-    );
-}
+export type Category = {
+    value: string,
+    label: string
+};
 
-export default LoadingScreen;
+export type CategoryArray = Array<Category>;
+
+export const Categories: CategoryArray = [
+    {
+        value: NO_CATEGORY,
+        label: NO_CATEGORY
+    },
+    {
+        value: "General",
+        label: "General"
+    },
+    {
+        value: "Work",
+        label: "Work"
+    },
+    {
+        value: "Personal",
+        label: "Personal"
+    },
+    {
+        value: "School",
+        label: "School"
+    },
+    {
+        value: "Other",
+        label: "Other"
+    }
+]

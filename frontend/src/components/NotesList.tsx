@@ -19,6 +19,7 @@ import NoteView from "./NoteView";
 import NoteEditDialog from "./NoteEditDialog";
 import {Note, NoteArray} from "../notesSlice";
 import PropTypes from "prop-types";
+import {ALL_CATEGORIES} from "../util/Categories";
 
 NotesList.propTypes = {
     notes: PropTypes.array.isRequired,
@@ -49,15 +50,15 @@ function NotesList({notes, searchQuery, categoryFilter} : Readonly<{notes: NoteA
     }
 
     const updateNotesProjection = () => {
-        if (categoryFilter.trim() === "" && searchQuery.trim() === "") {
+        if ((categoryFilter.trim() === "" || categoryFilter.trim() === ALL_CATEGORIES) && searchQuery.trim() === "") {
             const notesCopy = [...notes];
             notesCopy.sort(sortNotesByTimestamp)
             setNotesProjection(notesCopy);
         } else {
             let filteredNotes = notes.filter(note => {
-                if (categoryFilter.trim() !== "" && searchQuery.trim() !== "") {
+                if (categoryFilter.trim() !== "" && categoryFilter.trim() !== ALL_CATEGORIES && searchQuery.trim() !== "") {
                     return note.category.toLowerCase() === categoryFilter.toLowerCase() && (note.title.toLowerCase().includes(searchQuery.toLowerCase()) || note.content.toLowerCase().includes(searchQuery.toLowerCase()));
-                } else if (categoryFilter.trim() !== "") {
+                } else if (categoryFilter.trim() !== "" && categoryFilter.trim() === ALL_CATEGORIES) {
                     return note.category.toLowerCase() === categoryFilter.toLowerCase();
                 } else if (searchQuery.trim() !== "") {
                     return note.title.includes(searchQuery) || note.content.toLowerCase().includes(searchQuery.toLowerCase());

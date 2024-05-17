@@ -40,16 +40,18 @@ MaterialDialog.propTypes = {
     dialogTitle: PropTypes.string, // Dialog title, if title is not set it will not be displayed
     children: PropTypes.any, // Dialog content can contain any JSX elements
     dialogActions: PropTypes.any, // Dialog actions can contain buttons or other actions
-    primaryButtonIsEnabled: PropTypes.bool // Primary button is enabled by default
+    primaryButtonIsEnabled: PropTypes.bool, // Primary button is enabled by default
+    priority: PropTypes.string // Dialog priority
 }
 
-function MaterialDialog({cancellable, onClose, dialogTitle, children, dialogActions, primaryButtonIsEnabled} : Readonly<{
+function MaterialDialog({cancellable, onClose, dialogTitle, children, dialogActions, primaryButtonIsEnabled = true, priority} : Readonly<{
     cancellable?: boolean,
     onClose: any,
     dialogTitle?: string,
     children?: ReactNode,
     dialogActions?: Array<DialogAction>,
     primaryButtonIsEnabled?: boolean,
+    priority?: string
 }>) {
     const getButton = (btnTitle: string, btnPriority: string, btnCallback: any) : ReactNode => {
         const key = uuidv4()
@@ -66,7 +68,7 @@ function MaterialDialog({cancellable, onClose, dialogTitle, children, dialogActi
     }
 
     return (
-        <div className={"priority dialog-backdrop"} onMouseDown={() => {
+        <div className={"priority priority-" + priority + " dialog-backdrop"} onMouseDown={() => {
             /* Close dialog on click outside */
             if (cancellable) {
                 onClose()
