@@ -76,7 +76,7 @@ function MaterialDialog({cancellable, onClose, dialogTitle, children, dialogActi
         }}>
             <div className={"dialog-paper"} onMouseDown={(e) => e.stopPropagation()}>
                 {dialogTitle === undefined ? null : <h1 className={"dialog-title"}>{dialogTitle}</h1>}
-                <div>
+                <div style={{width: "100%"}}>
                     {children}
                 </div>
                 <div className={"dialog-actions"}>

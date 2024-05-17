@@ -25,6 +25,9 @@ import LoadingScreen from "./widgets/LoadingScreen";
 import {MenuItem} from "@mui/material";
 import {Categories, Category, DEFAULT_CATEGORY, NO_CATEGORY} from "../util/Categories";
 
+const MAX_TITLE_LENGTH = 100;
+const MAX_CONTENT_LENGTH = 1000;
+
 NoteEditDialog.propTypes = {
     onClose: PropTypes.func.isRequired,
     id: PropTypes.string,
@@ -54,6 +57,32 @@ function NoteEditDialog({onClose, id, isAdd} : Readonly<{onClose: any, id: strin
         }
     }, [note]);
 
+    const validateForm = () => {
+        /* Validate title and content length */
+        if (noteTitle.length > MAX_TITLE_LENGTH) {
+            setNoteTitle(noteTitle.substring(0, MAX_TITLE_LENGTH));
+        }
+
+        if (noteContent.length > MAX_CONTENT_LENGTH) {
+            setNoteContent(noteContent.substring(0, MAX_CONTENT_LENGTH));
+        }
+
+        /* Validate form values */
+        if (note !== undefined) {
+            if (noteCategory === "" || noteCategory === DEFAULT_CATEGORY || noteContent === "" || noteTitle === "" || (noteCategory === note.category && noteContent === note.content && noteTitle === note.title)) {
+                setSaveIsDisabled(true);
+            } else {
+                setSaveIsDisabled(false);
+            }
+        } else if (isAdd && (noteCategory === "" || noteCategory === DEFAULT_CATEGORY || noteContent === "" || noteTitle === "")) {
+            setSaveIsDisabled(true);
+        } else if (!isAdd) {
+            setSaveIsDisabled(true);
+        } else {
+            setSaveIsDisabled(false);
+        }
+    }
+
     useEffect(() => {
         if (noteTitle !== selectedNote.title) {
             let n = {...selectedNote};
@@ -73,19 +102,7 @@ function NoteEditDialog({onClose, id, isAdd} : Readonly<{onClose: any, id: strin
             setSelectedNote(n);
         }
 
-        if (note !== undefined) {
-            if (noteCategory === "" || noteCategory === DEFAULT_CATEGORY || noteContent === "" || noteTitle === "" || (noteCategory === note.category && noteContent === note.content && noteTitle === note.title)) {
-                setSaveIsDisabled(true);
-            } else {
-                setSaveIsDisabled(false);
-            }
-        } else if (isAdd && (noteCategory === "" || noteCategory === DEFAULT_CATEGORY || noteContent === "" || noteTitle === "")) {
-            setSaveIsDisabled(true);
-        } else if (!isAdd) {
-            setSaveIsDisabled(true);
-        } else {
-            setSaveIsDisabled(false);
-        }
+        validateForm()
     }, [noteTitle, noteContent, noteCategory, selectedNote, isAdd, note]);
 
     const onDialogClose = () => {
@@ -113,9 +130,9 @@ function NoteEditDialog({onClose, id, isAdd} : Readonly<{onClose: any, id: strin
                 },
                 body: JSON.stringify(editedNote)
             }).then(response => response.json())
-                .then(() => {
+                .then((data: Note) => {
                     setLoading(false);
-                    dispatch(addNote(editedNote))
+                    dispatch(addNote(data))
                     onDialogClose()
                 }).catch(error => {
                     setErrorMessage(error.message);
@@ -129,9 +146,9 @@ function NoteEditDialog({onClose, id, isAdd} : Readonly<{onClose: any, id: strin
                 },
                 body: JSON.stringify(editedNote)
             }).then(response => response.json())
-                .then(() => {
+                .then((data: Note) => {
                     setLoading(false);
-                    dispatch(editNote(editedNote))
+                    dispatch(editNote(data))
                     onDialogClose()
                 }).catch(error => {
                     setErrorMessage(error.message);
@@ -189,16 +206,23 @@ function NoteEditDialog({onClose, id, isAdd} : Readonly<{onClose: any, id: strin
                     }]} priority={"high"}>{`Are you sure you want to delete the note "${selectedNote.title}"?`}</MaterialDialog> : null}
 
                     {/* Dialog contents go here */}
-                    <MaterialTextInputEditText label={"title"} value={noteTitle} onChange={(e) => {
+                    <MaterialTextInputEditText fullWidth label={"title"} value={noteTitle} onChange={(e) => {
                         setNoteTitle(e.target.value)
-                    }}/>
-                    <MaterialTextInputEditText multiline label={"Note"} rows={8} value={noteContent} onChange={(e) => {
-                        setNoteContent(e.target.value)
-                    }}/>
-                    <MaterialTextInputEditText label={"Category"} value={noteCategory} onChange={(e) => {
+                    }} helperText={noteTitle.length.toString() + "/" + MAX_TITLE_LENGTH.toString()}/>
+                    <br/><br/>
+                    <MaterialTextInputEditText fullWidth multiline label={"Note"} rows={8} value={noteContent}
+                                               onChange={(e) => {
+                                                   setNoteContent(e.target.value)
+                                               }}
+                                               helperText={noteContent.length.toString() + "/" + MAX_CONTENT_LENGTH.toString()}/>
+                    <br/><br/>
+                    <MaterialTextInputEditText fullWidth label={"Category"} value={noteCategory} onChange={(e) => {
                         setNoteCategory(e.target.value)
                     }} select>
-                        {[{value: "-- Select a category --", label: "-- Select a category --"}, ...Categories].map((option: Category) => (
+                        {[{
+                            value: DEFAULT_CATEGORY,
+                            label: DEFAULT_CATEGORY
+                        }, ...Categories].map((option: Category) => (
                             <MenuItem key={option.value} value={option.value}>
                                 {option.label}
                             </MenuItem>
