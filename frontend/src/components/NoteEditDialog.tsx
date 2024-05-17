@@ -17,9 +17,10 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from "prop-types";
 import {useDispatch, useSelector} from "react-redux";
-import {addNote, editNote, removeNote, selectNoteById} from "../notesSlice";
+import {addNote, editNote, Note, removeNote, selectNoteById} from "../notesSlice";
 import MaterialDialog from "./widgets/MaterialDialog";
 import {MaterialTextInputEditText} from "./widgets/MaterialTextInputEditText";
+import {uuidv4} from "../util/UUID";
 
 NoteEditDialog.propTypes = {
     onClose: PropTypes.func.isRequired,
@@ -32,10 +33,12 @@ function NoteEditDialog({onClose, id, isAdd} : Readonly<{onClose: any, id: strin
     const note = useSelector(noteSelector);
     const dispatch = useDispatch();
 
-    const [selectedNote, setSelectedNote] = useState({id: "", title: "", content: "", category: ""});
-    const [noteTitle, setNoteTitle] = useState("");
-    const [noteContent, setNoteContent] = useState("");
-    const [noteCategory, setNoteCategory] = useState("");
+    const [selectedNote, setSelectedNote] : [Note, any] = useState({id: "", title: "", content: "", category: "", timestamp: 0});
+    const [noteTitle, setNoteTitle] : [string, any] = useState("");
+    const [noteContent, setNoteContent] : [string, any] = useState("");
+    const [noteCategory, setNoteCategory] : [string, any] = useState("");
+    const [timestamp, setTimestamp] : [number, any] = useState(0);
+    const [saveIsDisabled, setSaveIsDisabled] : [boolean, any] = useState(true);
 
     useEffect(() => {
         if (note) {
@@ -43,6 +46,7 @@ function NoteEditDialog({onClose, id, isAdd} : Readonly<{onClose: any, id: strin
             setNoteTitle(note.title);
             setNoteContent(note.content);
             setNoteCategory(note.category);
+            setTimestamp(note.timestamp);
         }
     }, [note]);
 
@@ -64,23 +68,47 @@ function NoteEditDialog({onClose, id, isAdd} : Readonly<{onClose: any, id: strin
             n.category = noteCategory;
             setSelectedNote(n);
         }
-    }, [noteTitle, noteContent, noteCategory]);
+
+        if (note !== undefined) {
+            if (noteCategory === "" || noteContent === "" || noteTitle === "" || (noteCategory === note.category && noteContent === note.content && noteTitle === note.title)) {
+                setSaveIsDisabled(true);
+            } else {
+                setSaveIsDisabled(false);
+            }
+        } else if (isAdd && (noteCategory === "" || noteContent === "" || noteTitle === "")) {
+            setSaveIsDisabled(true);
+        } else if (!isAdd) {
+            setSaveIsDisabled(true);
+        } else {
+            setSaveIsDisabled(false);
+        }
+    }, [noteTitle, noteContent, noteCategory, selectedNote]);
 
     const onDialogClose = () => {
         onClose();
     }
 
     const onNoteSave = () => {
+        //TODO: Push to the server
         if (isAdd) {
-            const newNote = {
+            const newNote : Note = {
+                id: uuidv4(),
                 title: noteTitle,
                 content: noteContent,
-                category: noteCategory
+                category: noteCategory,
+                timestamp: Date.now()
             }
 
             dispatch(addNote(newNote))
         } else {
-            dispatch(editNote(selectedNote))
+            const editedNote : Note = {
+                id: selectedNote.id,
+                title: noteTitle,
+                content: noteContent,
+                category: noteCategory,
+                timestamp: Date.now()
+            }
+            dispatch(editNote(editedNote))
         }
 
         onDialogClose()
@@ -91,14 +119,19 @@ function NoteEditDialog({onClose, id, isAdd} : Readonly<{onClose: any, id: strin
         onDialogClose()
     }
 
-    const dialogActions = [
+    const dialogActionsEdit = [
         {btnTitle: "Save", btnPriority: "primary", btnCallback: onNoteSave},
         {btnTitle: "Delete", btnPriority: "error", btnCallback: onNoteDelete},
         {btnTitle: "Cancel", btnPriority: "secondary", btnCallback: onDialogClose}
     ]
 
+    const dialogActionsAdd = [
+        {btnTitle: "Add", btnPriority: "primary", btnCallback: onNoteSave},
+        {btnTitle: "Cancel", btnPriority: "secondary", btnCallback: onDialogClose}
+    ]
+
     return (
-        <MaterialDialog cancellable={true} onClose={onDialogClose} dialogActions={dialogActions}>
+        <MaterialDialog cancellable={true} onClose={onDialogClose} dialogActions={isAdd ? dialogActionsAdd : dialogActionsEdit} primaryButtonIsEnabled={!saveIsDisabled}>
             <MaterialTextInputEditText value={noteTitle} onChange={(e) => {
                 setNoteTitle(e.target.value)
             }}/>

@@ -17,13 +17,14 @@
 import React, {useEffect} from 'react';
 import NoteView from "./NoteView";
 import NoteEditDialog from "./NoteEditDialog";
+import {Note} from "../notesSlice";
 
-function NotesList({notes, searchQuery, categoryFilter} : Readonly<{notes: Array<{id: string, title: string, content: string, category: string}>, searchQuery: string, categoryFilter: string}>) {
+function NotesList({notes, searchQuery, categoryFilter} : Readonly<{notes: Array<Note>, searchQuery: string, categoryFilter: string}>) {
     const [selectedNoteId, setSelectedNoteId] : [string, any] = React.useState("");
     const [editDialogOpen, setEditDialogOpen] : [boolean, any] = React.useState(false);
 
     // Notes projection is a filtered notes list based on selected category and search query
-    const [notesProjection, setNotesProjection] : [Array<{id: string, title: string, content: string, category: string}>, any] = React.useState([]);
+    const [notesProjection, setNotesProjection] : [Array<Note>, any] = React.useState([]);
 
     useEffect(() => {
         if (!editDialogOpen) {
@@ -36,10 +37,15 @@ function NotesList({notes, searchQuery, categoryFilter} : Readonly<{notes: Array
         setEditDialogOpen(true);
     }
 
+    const sortNotesByTimestamp = (a: Note, b: Note) => {
+        return b.timestamp - a.timestamp;
+    }
+
     const updateNotesProjection = () => {
         if (categoryFilter.trim() === "" && searchQuery.trim() === "") {
-            setNotesProjection(notes);
-            return;
+            const notesCopy = [...notes];
+            notesCopy.sort(sortNotesByTimestamp)
+            setNotesProjection(notesCopy);
         } else {
             let filteredNotes = notes.filter(note => {
                 if (categoryFilter.trim() !== "" && searchQuery.trim() !== "") {
@@ -48,16 +54,21 @@ function NotesList({notes, searchQuery, categoryFilter} : Readonly<{notes: Array
                     return note.category.toLowerCase() === categoryFilter.toLowerCase();
                 } else if (searchQuery.trim() !== "") {
                     return note.title.includes(searchQuery) || note.content.toLowerCase().includes(searchQuery.toLowerCase());
+                } else {
+                    return false;
                 }
             });
 
-            setNotesProjection(filteredNotes);
+            const notesCopy = [...filteredNotes];
+            notesCopy.sort(sortNotesByTimestamp)
+            setNotesProjection(notesCopy);
         }
     }
 
     /* Search filter logics */
     useEffect(() => {
         updateNotesProjection()
+        // eslint-disable-next-line
     }, [notes, categoryFilter, searchQuery]);
 
     return (

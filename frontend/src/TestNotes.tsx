@@ -16,77 +16,89 @@
 
 // This is a draft for the database of notes intended for offline-testing. You can safely ignore this file.
 
-export const TestNotes : Array<{id: string, title: string, content: string, category: string}> = [
+export const TestNotes : Array<{id: string, title: string, content: string, category: string, timestamp: number}> = [
     {
         id: "00000000-0000-0000-0000-000000000000",
         title: "First note",
         content: "This is the first note",
-        category: "General"
+        category: "General",
+        timestamp: 0
     },
     {
         id: "00000000-0000-0000-0000-000000000001",
         title: "Second note",
         content: "This is the second note",
-        category: "General"
+        category: "General",
+        timestamp: 0
     },
     {
         id: "00000000-0000-0000-0000-000000000002",
         title: "Third note note",
         content: "This is the third note",
-        category: "General"
+        category: "General",
+        timestamp: 0
     },
     {
         id: "00000000-0000-0000-0000-000000000003",
         title: "Fourth note",
         content: "This is the fourth note",
-        category: "Miscellaneous"
+        category: "Miscellaneous",
+        timestamp: 0
     },
     {
         id: "00000000-0000-0000-0000-000000000004",
         title: "Fifth note",
         content: "This is the fifth note",
-        category: "Miscellaneous"
+        category: "Miscellaneous",
+        timestamp: 0
     },
     {
         id: "00000000-0000-0000-0000-000000000005",
         title: "Sixth note",
         content: "This is the sixth note",
-        category: "Miscellaneous"
+        category: "Miscellaneous",
+        timestamp: 0
     },
     {
         id: "00000000-0000-0000-0000-000000000006",
         title: "Seventh note",
         content: "This is the seventh note",
-        category: "Miscellaneous"
+        category: "Miscellaneous",
+        timestamp: 0
     },
     {
         id: "00000000-0000-0000-0000-000000000007",
         title: "Eighth note",
         content: "This is the eighth note",
-        category: "TODO"
+        category: "TODO",
+        timestamp: 0
     },
     {
         id: "00000000-0000-0000-0000-000000000008",
         title: "Ninth note",
         content: "This is the ninth note",
-        category: "TODO"
+        category: "TODO",
+        timestamp: 0
     },
     {
         id: "00000000-0000-0000-0000-000000000009",
         title: "Tenth note",
         content: "This is the tenth note",
-        category: "TODO"
+        category: "TODO",
+        timestamp: 0
     },
     {
         id: "00000000-0000-0000-0000-000000000010",
         title: "Eleventh note",
         content: "This is the eleventh note",
-        category: "TODO"
+        category: "TODO",
+        timestamp: 0
     },
     {
         id: "00000000-0000-0000-0000-000000000011",
         title: "Twelfth note",
         content: "This is the twelfth note",
-        category: "General"
+        category: "General",
+        timestamp: 0
     }
 ]

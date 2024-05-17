@@ -17,23 +17,26 @@
 import React from 'react';
 import PropTypes from "prop-types";
 import {MaterialButtonCard} from "./widgets/MaterialButtons";
+import {Note} from "../notesSlice";
 
 NoteView.propTypes = {
     note: PropTypes.shape({
         id: PropTypes.string.isRequired,
         title: PropTypes.string.isRequired,
         content: PropTypes.string.isRequired,
-        category: PropTypes.string.isRequired
+        category: PropTypes.string.isRequired,
+        timestamp: PropTypes.number.isRequired
     }).isRequired,
     selectNote: PropTypes.func.isRequired
 }
 
-function NoteView({note, selectNote} : Readonly<{note: {id: string, title: string, content: string, category: string}, selectNote: any}>) {
+function NoteView({note, selectNote} : Readonly<{note: Note, selectNote: any}>) {
     return (
         <MaterialButtonCard onClick={() => selectNote(note.id)}>
             <p>{note.title}</p>
             <p>{note.content}</p>
             <p>{note.category}</p>
+            <p>{(new Date(note.timestamp)).toLocaleString()}</p>
         </MaterialButtonCard>
     );
 }

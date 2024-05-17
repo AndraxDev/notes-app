@@ -46,6 +46,12 @@ export const MaterialButtonFilled = styled(MaterialButtonTemplate)(({ theme }) =
     color: "var(--color-accent-50)",
     backgroundColor: "var(--color-accent-800)",
     border: "1px solid var(--color-accent-800)",
+    '&:disabled': {
+        backgroundColor: "#444444",
+        border: "1px solid #444444",
+        color: "#cecece",
+        cursor: "not-allowed",
+    },
     '&:hover': {
         backgroundColor: "var(--color-accent-900)",
         border: "1px solid var(--color-accent-900)",

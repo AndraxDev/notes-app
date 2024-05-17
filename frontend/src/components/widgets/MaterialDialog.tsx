@@ -33,22 +33,24 @@ MaterialDialog.propTypes = {
     onClose: PropTypes.func, // Dialog close callback
     dialogTitle: PropTypes.string, // Dialog title, if title is not set it will not be displayed
     children: PropTypes.any, // Dialog content can contain any JSX elements
-    dialogActions: PropTypes.any // Dialog actions can contain buttons or other actions
+    dialogActions: PropTypes.any, // Dialog actions can contain buttons or other actions
+    primaryButtonIsEnabled: PropTypes.bool // Primary button is enabled by default
 }
 
-function MaterialDialog({cancellable, onClose, dialogTitle, children, dialogActions} : Readonly<{
+function MaterialDialog({cancellable, onClose, dialogTitle, children, dialogActions, primaryButtonIsEnabled} : Readonly<{
     cancellable?: boolean,
     onClose: any,
     dialogTitle?: string,
     children?: ReactNode,
-    dialogActions?: Array<{ btnTitle: string, btnPriority: string, btnCallback: any }>
+    dialogActions?: Array<{ btnTitle: string, btnPriority: string, btnCallback: any }>,
+    primaryButtonIsEnabled?: boolean,
 }>) {
 
     const getButton = (btnTitle: string, btnPriority: string, btnCallback: any) : ReactNode => {
         const key = uuidv4()
 
         if (btnPriority === "primary") {
-            return <MaterialButtonFilled key={key} onClick={btnCallback}>{btnTitle}</MaterialButtonFilled>
+            return <MaterialButtonFilled key={key} onClick={btnCallback} disabled={!primaryButtonIsEnabled}>{btnTitle}</MaterialButtonFilled>
         } else if (btnPriority === "secondary") {
             return <MaterialButtonOutlined key={key} onClick={btnCallback}>{btnTitle}</MaterialButtonOutlined>
         } else if (btnPriority === "error") {

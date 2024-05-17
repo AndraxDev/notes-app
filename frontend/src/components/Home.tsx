@@ -16,9 +16,8 @@
 
 import React, {useEffect} from 'react';
 import NotesList from "./NotesList";
-import {addNote, getAllNotes} from "../notesSlice";
+import {addNote, getAllNotes, Note} from "../notesSlice";
 import {useDispatch, useSelector} from "react-redux";
-import {TestNotes} from "../TestNotes";
 import NoteEditDialog from "./NoteEditDialog";
 import {MaterialButtonFilled} from "./widgets/MaterialButtons";
 import {MaterialTextInputEditText} from "./widgets/MaterialTextInputEditText";
@@ -28,18 +27,23 @@ function Home() {
     const noteSelector= getAllNotes();
     const ns = useSelector(noteSelector);
 
-    const [notes, setNotes] : [Array<{id: string, title: string, content: string, category: string}>, any] = React.useState([]);
+    const [notes, setNotes] : [Array<Note>, any] = React.useState([]);
     const [searchQuery, setSearchQuery] : [string, any] = React.useState("");
     const [categoryFilter, setCategoryFilter] : [string, any] = React.useState("");
     const [addDialogOpen, setAddDialogOpen] : [boolean, any] = React.useState(false);
+    const [errorMessages, setErrorMessages] : [string, any] = React.useState("");
 
     useEffect(() => {
-        // TODO: Replace with server request
-        TestNotes.map(note => {
-            dispatch(addNote(note))
+        fetch("https://66478a962bb946cf2f9e19e7.mockapi.io/api/v1/notes/notes")
+            .then(response => response.json())
+            .then((data: Array<Note>) => {
+                data.forEach(note => {
+                    dispatch(addNote(note))
+                })
+        }).catch(error => {
+            setErrorMessages(error.message);
         })
-
-        setNotes(TestNotes);
+        // eslint-disable-next-line
     }, []);
 
     useEffect(() => {
