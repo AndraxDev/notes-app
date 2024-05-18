@@ -19,12 +19,21 @@ import NotesList from "./NotesList";
 import {addNote, clearAllNotes, getAllNotes, Note, NoteArray} from "../notesSlice";
 import {useDispatch, useSelector} from "react-redux";
 import NoteEditDialog from "./NoteEditDialog";
-import {FloatingActionButton} from "./widgets/MaterialButtons";
+import {FloatingActionButton, MaterialButtonIcon} from "./widgets/MaterialButtons";
 import {MaterialTextInputEditText} from "./widgets/MaterialTextInputEditText";
 import LoadingScreen from "./widgets/LoadingScreen";
 import MaterialDialog from "./widgets/MaterialDialog";
 import {ALL_CATEGORIES, Categories, Category} from "../util/Categories";
 import {MenuItem} from "@mui/material";
+
+const getAssistantDefaultDescription = () => {
+    return (`
+        What can this assistant do:<br/><br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;Provide answer based on your notes<br/>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;Summarize your notes<br/>
+        
+    `);
+}
 
 function Home() {
     const dispatch = useDispatch();
@@ -37,6 +46,8 @@ function Home() {
     const [addDialogOpen, setAddDialogOpen] : [boolean, any] = React.useState(false);
     const [errorMessage, setErrorMessage] : [string, any] = React.useState("");
     const [loading, setLoading] : [boolean, any] = React.useState(true);
+    const [assistantOpened, setAssistantOpened] : [boolean, any] = React.useState(false);
+    const [prompt, setPrompt] : [string, any] = React.useState("");
 
     useEffect(() => {
         dispatch(clearAllNotes());
@@ -59,6 +70,21 @@ function Home() {
         setNotes(ns);
     }, [ns]);
 
+    /* AI assistant will listen for any changes to provide user with relevant info */
+    useEffect(() => {
+        const assistantSettings = {
+            "name": "M3 Notes Assistant",
+            "chatLocation": "m3Notes",
+            "icon": "https://notes.teslasoft.org/logo192.png",
+            "description": getAssistantDefaultDescription(),
+            "initialMessage": "Act as an assistant for Notes app. Provide your answers and suggestions based on the following note list: ```" + unescape(encodeURIComponent(JSON.stringify(notes))) + "```.",
+            "initialResponse": "Hello! I am the M3 Notes Assistant. I can help you with any questions you have about your notes. Feel free to ask me anything!",
+            "systemMessage": "Pay attention to the bar data provided to you. Provide your answers and suggestions based on it!"
+        }
+
+        setPrompt(encodeURIComponent(btoa(JSON.stringify(assistantSettings))));
+    }, [notes]);
+
     return (
         <div className={"content"}>
             {loading ? <LoadingScreen/> : null}
@@ -75,9 +101,19 @@ function Home() {
                 <FloatingActionButton onClick={() => setAddDialogOpen(true)}><span className={"material-symbols-outlined"}>add</span>&nbsp;&nbsp;New note&nbsp;</FloatingActionButton>
             </div>
 
+            <div className={"assistant-button-container"}>
+                <MaterialButtonIcon onClick={() => setAssistantOpened(!assistantOpened)}><span className={"material-symbols-outlined"}>smart_toy</span></MaterialButtonIcon>
+            </div>
+
+            {assistantOpened ? <div className={"assistant-embedded"}>
+                <iframe
+                    src={"https://assistant.teslasoft.org/embedded?payload=" + prompt} className={"assistant-iframe"} title={"M3 Notes"}/>
+            </div> : null}
+
             <h1 className={"app-title"}>M3 Notes</h1>
             <div className={"search-container"}>
-                <MaterialTextInputEditText className={"w60"} variant={"filled"} label={"Search"} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}/>
+                <MaterialTextInputEditText className={"w60"} variant={"filled"} label={"Search"} value={searchQuery}
+                                           onChange={(e) => setSearchQuery(e.target.value)}/>
                 <MaterialTextInputEditText className={"w30"} variant={"filled"}
                                            label={"Category"}
                                            value={categoryFilter}

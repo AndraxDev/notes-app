@@ -84,6 +84,11 @@ export const MaterialButtonTonal = styled(MaterialButtonTemplate)(() => ({
     },
 }));
 
+export const MaterialButtonIcon = styled(MaterialButtonTonal)(() => ({
+    width: "56px",
+    height: "56px",
+}));
+
 export const MaterialButtonOutlined = styled(MaterialButtonTemplate)(() => ({
     color: "var(--color-accent-800)",
     borderColor: "var(--color-accent-800)",
