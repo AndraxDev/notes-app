@@ -85,6 +85,7 @@ function NotesList({notes, searchQuery, categoryFilter} : Readonly<{notes: NoteA
             {notesProjection.map(note => (
                 <NoteView note={note} selectNote={onNoteSelect} key={note.id}/>
             ))}
+            <div className={"fab-space"}>{/* Leave some space for fab and mobile browsers */}</div>
         </div>
     );
 }

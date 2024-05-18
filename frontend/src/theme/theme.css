@@ -80,15 +80,15 @@ a, div, button {
     -webkit-touch-callout: none;
 }
 
-/* This container will take 75% width. Works better with display: flex, flex-direction: row, flex-wrap: nowrap */
-.w75 {
-    width: 75%;
-    flex: 3;
+/* This container will take 66% width. Works better with display: flex, flex-direction: row, flex-wrap: nowrap */
+.w60 {
+    width: 66%;
+    flex: 2;
 }
 
-/* This container will take 25% width. Works better with display: flex, flex-direction: row, flex-wrap: nowrap */
-.w25 {
-    width: 25%;
+/* This container will take 33% width. Works better with display: flex, flex-direction: row, flex-wrap: nowrap */
+.w30 {
+    width: 33%;
     flex: 1;
 }
 
@@ -99,6 +99,14 @@ a, div, button {
     margin-bottom: 24px;
     width: 100%;
     text-align: center;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    overflow-y: auto;
 }
 
 /* FLOATING ACTION BUTTON STYLES */
@@ -153,6 +161,14 @@ a, div, button {
     padding: 24px;
 }
 
+@media (max-width: 708px) {
+    .dialog-paper {
+        width: 100vw;
+        height: calc(100vh - 48px);
+        border-radius: 0;
+    }
+}
+
 .dialog-actions {
     display: flex;
     flex-direction: row;
@@ -188,8 +204,14 @@ a, div, button {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    width: 100%;
-    height: 100%;
+    width: 300px;
+    height: 240px;
+}
+
+@media (max-width: 708px) {
+    .card {
+        width: calc(100vw - 72px);
+    }
 }
 
 .card-title {
@@ -221,7 +243,7 @@ a, div, button {
     display: flex;
     flex-direction: column;
     width: 100%;
-    align-items: end;
+    align-items: flex-end;
     gap: 8px;
 }
 
@@ -235,16 +257,23 @@ a, div, button {
 .card-time {
     padding: 0;
     margin: 0;
-    color: var(--color-accent-500);
+    color: rgba(255, 255, 255, 0.3);
 }
 
 /* OTHER STUFF */
 .search-container {
     display: flex;
     flex-direction: row;
-    width: calc(100% - 96px);
-    margin: 24px 48px;
+    width: 600px;
+    margin: 0 48px 24px 48px;
     gap: 24px;
+}
+
+@media (max-width: 708px) {
+    .search-container {
+        margin: 0 24px 24px 24px;
+        width: calc(100% - 48px);
+    }
 }
 
 .grid-list {
@@ -254,5 +283,11 @@ a, div, button {
     justify-content: center;
     gap: 24px;
     height: calc(100vh - 160px);
-    overflow-y: auto;
+    overflow-y: scroll;
+    padding-left: 16px;
+}
+
+.fab-space {
+    width: calc(100vw - 72px);
+    height: 100px;
 }

@@ -102,11 +102,10 @@ export const MaterialButtonCard = styled(MaterialButtonTemplate)(() => ({
     border: "1px solid rgba(255, 255, 255, 0.1)",
     borderRadius: "16px",
     textTransform: "none",
-    width: "260px",
     height: "260px",
     verticalAlign: "middle",
     '&:hover': {
-        backgroundColor: "var(--color-accent-200)",
+        backgroundColor: "rgba(255, 255, 255, 0.2)",
         border: "1px solid rgba(255, 255, 255, 0.1)"
     },
 }));

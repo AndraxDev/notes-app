@@ -42,10 +42,14 @@ function NoteView({note, selectNote} : Readonly<{note: Note, selectNote: any}>) 
     }
 
     return (
-        <MaterialButtonCard onClick={() => selectNote(note.id)}>
+        <MaterialButtonCard sx={{
+            backgroundColor: getCategoryColorTint(note.category),
+        }} onClick={() => selectNote(note.id)}>
             <div className={"card"}>
                 <div>
-                    <p className={"card-title"}>{note.title}</p>
+                    <p className={"card-title"} style={{
+                        color: getCategoryColor(note.category)
+                    }}>{note.title}</p>
                     <p className={"card-content"}>{note.content}</p>
                 </div>
                 <div className={"card-footer"}>

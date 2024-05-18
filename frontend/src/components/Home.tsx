@@ -60,7 +60,7 @@ function Home() {
     }, [ns]);
 
     return (
-        <div>
+        <div className={"content"}>
             {loading ? <LoadingScreen/> : null}
 
             {errorMessage !== "" ? <MaterialDialog onClose={() => setErrorMessage("")} dialogTitle={"Server error"} dialogActions={[{
@@ -77,8 +77,8 @@ function Home() {
 
             <h1 className={"app-title"}>M3 Notes</h1>
             <div className={"search-container"}>
-                <MaterialTextInputEditText className={"w75"} variant={"filled"} label={"Search"} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}/>
-                <MaterialTextInputEditText className={"w25"} variant={"filled"}
+                <MaterialTextInputEditText className={"w60"} variant={"filled"} label={"Search"} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}/>
+                <MaterialTextInputEditText className={"w30"} variant={"filled"}
                                            label={"Category"}
                                            value={categoryFilter}
                                            onChange={(e) => setCategoryFilter(e.target.value)}
