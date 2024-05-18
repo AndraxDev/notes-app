@@ -32,43 +32,43 @@ export const Categories: CategoryArray = [
     {
         value: NO_CATEGORY,
         label: NO_CATEGORY,
-        color: "var(--color-accent-800)",
-        colorTint: "var(--color-accent-300)",
-        colorHover: "var(--color-accent-400)"
+        color: "#d7d7d7",
+        colorTint: "rgba(158,158,158,0.12)",
+        colorHover: "rgba(158,158,158,0.24)"
     },
     {
         value: "General",
         label: "General",
-        color: "#ffe38e",
-        colorTint: "rgba(255,218,105,0.16)",
-        colorHover: "rgba(255,215,99,0.32)"
+        color: "#ffe9a6",
+        colorTint: "rgba(255,224,132,0.12)",
+        colorHover: "rgba(255,223,130,0.24)"
     },
     {
         value: "Work",
         label: "Work",
-        color: "#98d3ff",
-        colorTint: "rgba(33,150,243,0.16)",
-        colorHover: "rgba(33,150,243,0.32)"
+        color: "#a1c9ff",
+        colorTint: "rgba(143,192,255,0.12)",
+        colorHover: "rgba(149,198,255,0.24)"
     },
     {
         value: "Personal",
         label: "Personal",
-        color: "#88ff8e",
-        colorTint: "rgba(100,204,103,0.16)",
-        colorHover: "rgba(93,196,95,0.32)"
+        color: "#b4ff9f",
+        colorTint: "rgba(151,190,132,0.12)",
+        colorHover: "rgba(164,204,141,0.24)"
     },
     {
         value: "School",
         label: "School",
-        color: "#ff8484",
-        colorTint: "rgba(255,78,78,0.16)",
-        colorHover: "rgba(255,111,111,0.32)"
+        color: "#ffa2a2",
+        colorTint: "rgba(255,142,142,0.12)",
+        colorHover: "rgba(255,147,147,0.24)"
     },
     {
         value: "Other",
         label: "Other",
-        color: "#9E9E9E",
-        colorTint: "rgba(158,158,158,0.16)",
-        colorHover: "rgba(158,158,158,0.32)"
+        color: "#dbc7ff",
+        colorTint: "rgba(218,195,255,0.12)",
+        colorHover: "rgba(238,223,255,0.24)"
     }
 ]

@@ -52,7 +52,7 @@
 }
 
 html, body {
-    background-color: var(--color-accent-100);
+    background-color: var(--color-accent-50);
     overscroll-behavior: none; /* Make mobile app "more native" by disabling scroll to avoid accidental page reloads while scrolling page */
     overflow: hidden;
 
