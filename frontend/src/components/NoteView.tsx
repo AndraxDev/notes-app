@@ -41,9 +41,19 @@ function NoteView({note, selectNote} : Readonly<{note: Note, selectNote: any}>) 
         return Categories.find(c => c.value === category)?.colorTint;
     }
 
+    const getCategoryColorHover = (category: string) => {
+        return Categories.find(c => c.value === category)?.colorHover;
+    }
+
     return (
         <MaterialButtonCard sx={{
             backgroundColor: getCategoryColorTint(note.category),
+            '& .MuiTouchRipple-root': {
+                color: getCategoryColor(note.category),
+            },
+            '&:hover': {
+                backgroundColor: getCategoryColorHover(note.category),
+            }
         }} onClick={() => selectNote(note.id)}>
             <div className={"card"}>
                 <div>

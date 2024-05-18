@@ -84,8 +84,16 @@ function Home() {
                                            onChange={(e) => setCategoryFilter(e.target.value)}
                                            select
                 >
-                    {[{value: ALL_CATEGORIES, label: ALL_CATEGORIES, color: "var(--color-accent-800)",
-                        colorTint: "var(--color-accent-300)"}, ...Categories].map((option: Category) => (
+                    {[
+                        {
+                            value: ALL_CATEGORIES,
+                            label: ALL_CATEGORIES,
+                            color: "var(--color-accent-800)",
+                            colorTint: "var(--color-accent-300)",
+                            colorHover: "var(--color-accent-400)"
+                        },
+                        ...Categories
+                    ].map((option: Category) => (
                         <MenuItem key={option.value} value={option.value}>
                             {option.label}
                         </MenuItem>

@@ -22,7 +22,8 @@ export type Category = {
     value: string,
     label: string,
     color: string,
-    colorTint: string
+    colorTint: string,
+    colorHover: string
 };
 
 export type CategoryArray = Array<Category>;
@@ -32,36 +33,42 @@ export const Categories: CategoryArray = [
         value: NO_CATEGORY,
         label: NO_CATEGORY,
         color: "var(--color-accent-800)",
-        colorTint: "var(--color-accent-300)"
+        colorTint: "var(--color-accent-300)",
+        colorHover: "var(--color-accent-400)"
     },
     {
         value: "General",
         label: "General",
-        color: "#FFC107",
-        colorTint: "rgba(255,193,7,0.16)"
+        color: "#ffe38e",
+        colorTint: "rgba(255,218,105,0.16)",
+        colorHover: "rgba(255,215,99,0.32)"
     },
     {
         value: "Work",
         label: "Work",
-        color: "#2196F3",
-        colorTint: "rgba(33,150,243,0.16)"
+        color: "#98d3ff",
+        colorTint: "rgba(33,150,243,0.16)",
+        colorHover: "rgba(33,150,243,0.32)"
     },
     {
         value: "Personal",
         label: "Personal",
-        color: "#4CAF50",
-        colorTint: "rgba(76,175,80,0.16)"
+        color: "#88ff8e",
+        colorTint: "rgba(100,204,103,0.16)",
+        colorHover: "rgba(93,196,95,0.32)"
     },
     {
         value: "School",
         label: "School",
-        color: "#FF5722",
-        colorTint: "rgba(255,87,34,0.16)"
+        color: "#ff8484",
+        colorTint: "rgba(255,78,78,0.16)",
+        colorHover: "rgba(255,111,111,0.32)"
     },
     {
         value: "Other",
         label: "Other",
         color: "#9E9E9E",
-        colorTint: "rgba(158,158,158,0.16)"
+        colorTint: "rgba(158,158,158,0.16)",
+        colorHover: "rgba(158,158,158,0.32)"
     }
 ]

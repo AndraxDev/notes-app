@@ -224,7 +224,8 @@ function NoteEditDialog({onClose, id, isAdd} : Readonly<{onClose: any, id: strin
                             value: DEFAULT_CATEGORY,
                             label: DEFAULT_CATEGORY,
                             color: "var(--color-accent-800)",
-                            colorTint: "var(--color-accent-300)"
+                            colorTint: "var(--color-accent-300)",
+                            colorHover: "var(--color-accent-400)"
                         }, ...Categories].map((option: Category) => (
                             <MenuItem key={option.value} value={option.value}>
                                 {option.label}
