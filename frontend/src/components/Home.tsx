@@ -72,7 +72,7 @@ function Home() {
             {addDialogOpen ? <NoteEditDialog onClose={() => setAddDialogOpen(false)} id={""} isAdd={true}/> : null}
 
             <div className={"fab"}>
-                <FloatingActionButton onClick={() => setAddDialogOpen(true)}><span className={"material-symbols-outlined"}>add</span>&nbsp;&nbsp;&nbsp;Add Note</FloatingActionButton>
+                <FloatingActionButton onClick={() => setAddDialogOpen(true)}><span className={"material-symbols-outlined"}>add</span>&nbsp;&nbsp;New note&nbsp;</FloatingActionButton>
             </div>
 
             <h1 className={"app-title"}>M3 Notes</h1>

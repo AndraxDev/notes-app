@@ -15,8 +15,8 @@
  *****************************************************************/
 
 export const DEFAULT_CATEGORY = "-- Select a category --";
-export const ALL_CATEGORIES = "-- All categories --";
-export const NO_CATEGORY = "-- No category --";
+export const ALL_CATEGORIES = "All";
+export const NO_CATEGORY = "Uncategorized";
 
 export type Category = {
     value: string,

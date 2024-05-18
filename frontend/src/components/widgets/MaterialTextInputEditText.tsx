@@ -34,7 +34,10 @@ export const MaterialTextInputEditText = styled(TextField)(() => ({
         color: 'var(--color-accent-900)',
     },
     '& .MuiInput-underline:after': {
-        borderBottomColor: 'var(--color-accent-900)',
+        borderBottomColor: 'var(--color-accent-800)',
+    },
+    '& .MuiFilledInput-root:after': {
+        borderBottomColor: 'var(--color-accent-800)',
     },
     '& .MuiOutlinedInput-root': {
         '&.Mui-focused fieldset': {
