@@ -155,6 +155,7 @@ a, div, button {
     flex-direction: column;
     align-items: center;
     padding: 24px;
+    color: var(--color-primary-light);
 }
 
 @media (max-width: 708px) {

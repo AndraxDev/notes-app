@@ -15,7 +15,6 @@
  *****************************************************************/
 
 import React, {useEffect, useState} from 'react';
-import PropTypes from "prop-types";
 import {useDispatch, useSelector} from "react-redux";
 import {addNote, editNote, Note, removeNote, selectNoteById} from "../notesSlice";
 import MaterialDialog, {DialogAction} from "./widgets/MaterialDialog";
@@ -27,12 +26,6 @@ import {Categories, Category, DEFAULT_CATEGORY, NO_CATEGORY} from "../util/Categ
 
 const MAX_TITLE_LENGTH = 70;
 const MAX_CONTENT_LENGTH = 1000;
-
-NoteEditDialog.propTypes = {
-    onClose: PropTypes.func.isRequired,
-    id: PropTypes.string,
-    isAdd: PropTypes.bool
-}
 
 function NoteEditDialog({onClose, id, isAdd} : Readonly<{onClose: any, id: string, isAdd: boolean}>) {
     const noteSelector= selectNoteById(id);
@@ -121,40 +114,48 @@ function NoteEditDialog({onClose, id, isAdd} : Readonly<{onClose: any, id: strin
             timestamp: Date.now()
         }
 
-        console.log(editedNote.id)
-
         if (isAdd) {
-            fetch("https://66478a962bb946cf2f9e19e7.mockapi.io/api/v1/notes/notes", {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(editedNote)
-            }).then(response => response.json())
-                .then((data: Note) => {
-                    setLoading(false);
-                    dispatch(addNote(data))
-                    onDialogClose()
-                }).catch(error => {
-                    setErrorMessage(error.message);
-                }
-            )
+            setLoading(false);
+            dispatch(addNote(editedNote))
+            onDialogClose()
+
+            // Implement when firebase is ready
+            // fetch("https://66478a962bb946cf2f9e19e7.mockapi.io/api/v1/notes/notes", {
+            //     method: "POST",
+            //     headers: {
+            //         'Content-Type': 'application/json'
+            //     },
+            //     body: JSON.stringify(editedNote)
+            // }).then(response => response.json())
+            //     .then((data: Note) => {
+            //         setLoading(false);
+            //         dispatch(addNote(data))
+            //         onDialogClose()
+            //     }).catch(error => {
+            //         setErrorMessage(error.message);
+            //     }
+            // )
         } else {
-            fetch("https://66478a962bb946cf2f9e19e7.mockapi.io/api/v1/notes/notes/" + editedNote.id, {
-                method: "PUT",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(editedNote)
-            }).then(response => response.json())
-                .then((data: Note) => {
-                    setLoading(false);
-                    dispatch(editNote(data))
-                    onDialogClose()
-                }).catch(error => {
-                    setErrorMessage(error.message);
-                }
-            )
+            setLoading(false);
+            dispatch(editNote(editedNote))
+            onDialogClose()
+
+            // Implement when firebase is ready
+            // fetch("https://66478a962bb946cf2f9e19e7.mockapi.io/api/v1/notes/notes/" + editedNote.id, {
+            //     method: "PUT",
+            //     headers: {
+            //         'Content-Type': 'application/json'
+            //     },
+            //     body: JSON.stringify(editedNote)
+            // }).then(response => response.json())
+            //     .then((data: Note) => {
+            //         setLoading(false);
+            //         dispatch(editNote(data))
+            //         onDialogClose()
+            //     }).catch(error => {
+            //         setErrorMessage(error.message);
+            //     }
+            // )
         }
     }
 
@@ -162,16 +163,20 @@ function NoteEditDialog({onClose, id, isAdd} : Readonly<{onClose: any, id: strin
         setDeletionConfirmation(false);
 
         if (note !== undefined) {
-            setLoading(true);
-            fetch("https://66478a962bb946cf2f9e19e7.mockapi.io/api/v1/notes/notes/" + note.id, {
-                method: "DELETE"
-            }).then(() => {
-                setLoading(false);
-                dispatch(removeNote(note.id))
-                onDialogClose()
-            }).catch(error => {
-                setErrorMessage(error.message);
-            })
+            dispatch(removeNote(note.id))
+            onDialogClose()
+
+            // Implement when firebase is ready
+            // setLoading(true);
+            // fetch("https://66478a962bb946cf2f9e19e7.mockapi.io/api/v1/notes/notes/" + note.id, {
+            //     method: "DELETE"
+            // }).then(() => {
+            //     setLoading(false);
+            //     dispatch(removeNote(note.id))
+            //     onDialogClose()
+            // }).catch(error => {
+            //     setErrorMessage(error.message);
+            // })
         }
     }
 

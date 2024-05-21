@@ -1,2 +1,5 @@
 
-“typescript:S1874P"EThe signature '(string: string): string' of 'unescape' is deprecated.(Ë•¯–şÿÿÿÿ8†‘Úçø1J$c0a103a0-5551-465b-801d-10ba725834c4
+„typescript:S1854'"6Remove this useless assignment to variable "dispatch".(ñ€µÅøÿÿÿÿ8èÆİù1J$536511f6-3571-4c63-9d55-29f9f2d19fe7
+†typescript:S1854."8Remove this useless assignment to variable "setLoading".(Î‚Šòşÿÿÿÿ8èÆİù1J$4ac3cc06-00ec-4d4b-9e39-8644196e88f7
+‚typescript:S1135."4Complete the task associated to this "TODO" comment.(Î‚Šòşÿÿÿÿ8éÆİù1J$64c68e77-65bb-4923-a321-0ce8809a0b09
+“typescript:S1874R"EThe signature '(string: string): string' of 'unescape' is deprecated.(Ë•¯–şÿÿÿÿ8êÆİù1J$5cbcfbfe-6729-4bbd-8777-48a8711233f2

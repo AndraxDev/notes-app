@@ -17,22 +17,11 @@
 import React, {useEffect} from 'react';
 import NoteView from "./NoteView";
 import NoteEditDialog from "./NoteEditDialog";
-import {Note, NoteArray} from "../notesSlice";
-import PropTypes from "prop-types";
-import {ALL_CATEGORIES} from "../util/Categories";
+import {NoteArray} from "../notesSlice";
 
-NotesList.propTypes = {
-    notes: PropTypes.array.isRequired,
-    searchQuery: PropTypes.string.isRequired,
-    categoryFilter: PropTypes.string.isRequired
-}
-
-function NotesList({notes, searchQuery, categoryFilter} : Readonly<{notes: NoteArray, searchQuery: string, categoryFilter: string}>) {
+function NotesList({notes} : Readonly<{notes: NoteArray}>) {
     const [selectedNoteId, setSelectedNoteId] : [string, any] = React.useState("");
     const [editDialogOpen, setEditDialogOpen] : [boolean, any] = React.useState(false);
-
-    // Notes projection is a filtered notes list based on selected category and search query
-    const [notesProjection, setNotesProjection] : [NoteArray, any] = React.useState([]);
 
     useEffect(() => {
         if (!editDialogOpen) {
@@ -45,44 +34,10 @@ function NotesList({notes, searchQuery, categoryFilter} : Readonly<{notes: NoteA
         setEditDialogOpen(true);
     }
 
-    const sortNotesByTimestamp = (a: Note, b: Note) => {
-        return b.timestamp - a.timestamp;
-    }
-
-    const updateNotesProjection = () => {
-        if ((categoryFilter.trim() === "" || categoryFilter.trim() === ALL_CATEGORIES) && searchQuery.trim() === "") {
-            const notesCopy = [...notes];
-            notesCopy.sort(sortNotesByTimestamp)
-            setNotesProjection(notesCopy);
-        } else {
-            let filteredNotes = notes.filter(note => {
-                if (categoryFilter.trim() === ALL_CATEGORIES && searchQuery.trim() !== "") {
-                    return note.title.toLowerCase().includes(searchQuery.toLowerCase()) || note.content.toLowerCase().includes(searchQuery.toLowerCase());
-                } else if (categoryFilter.trim() !== ALL_CATEGORIES && searchQuery.trim() !== "") {
-                    return note.category.toLowerCase() === categoryFilter.toLowerCase() && (note.title.toLowerCase().includes(searchQuery.toLowerCase()) || note.content.toLowerCase().includes(searchQuery.toLowerCase()));
-                } else if (searchQuery.trim() === "" && categoryFilter.trim() !== ALL_CATEGORIES) {
-                    return note.category.toLowerCase() === categoryFilter.toLowerCase()
-                } else {
-                    return true;
-                }
-            });
-
-            const notesCopy = [...filteredNotes];
-            notesCopy.sort(sortNotesByTimestamp)
-            setNotesProjection(notesCopy);
-        }
-    }
-
-    /* Search filter logics */
-    useEffect(() => {
-        updateNotesProjection()
-        // eslint-disable-next-line
-    }, [notes, categoryFilter, searchQuery]);
-
     return (
         <div className={"grid-list"}>
             {editDialogOpen ? <NoteEditDialog onClose={() => setEditDialogOpen(false)} id={selectedNoteId} isAdd={false}/> : null}
-            {notesProjection.map(note => (
+            {notes.map(note => (
                 <NoteView note={note} selectNote={onNoteSelect} key={note.id}/>
             ))}
             <div className={"fab-space"}>{/* Leave some space for fab and mobile browsers */}</div>

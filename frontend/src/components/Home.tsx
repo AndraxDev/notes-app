@@ -16,7 +16,7 @@
 
 import React, {useEffect} from 'react';
 import NotesList from "./NotesList";
-import {addNote, clearAllNotes, getAllNotes, Note, NoteArray} from "../notesSlice";
+import {getFiltered, NoteArray} from "../notesSlice";
 import {useDispatch, useSelector} from "react-redux";
 import NoteEditDialog from "./NoteEditDialog";
 import {FloatingActionButton, MaterialButtonIcon} from "./widgets/MaterialButtons";
@@ -37,34 +37,36 @@ const getAssistantDefaultDescription = () => {
 
 function Home() {
     const dispatch = useDispatch();
-    const noteSelector= getAllNotes();
-    const ns = useSelector(noteSelector);
 
     const [notes, setNotes] : [NoteArray, any] = React.useState([]);
     const [searchQuery, setSearchQuery] : [string, any] = React.useState("");
     const [categoryFilter, setCategoryFilter] : [string, any] = React.useState(ALL_CATEGORIES);
     const [addDialogOpen, setAddDialogOpen] : [boolean, any] = React.useState(false);
     const [errorMessage, setErrorMessage] : [string, any] = React.useState("");
-    const [loading, setLoading] : [boolean, any] = React.useState(true);
+    const [loading, setLoading] : [boolean, any] = React.useState(false); // TODO: Change to true when Firebase is ready
     const [assistantOpened, setAssistantOpened] : [boolean, any] = React.useState(false);
     const [prompt, setPrompt] : [string, any] = React.useState("");
 
-    useEffect(() => {
-        dispatch(clearAllNotes());
-        fetch("https://66478a962bb946cf2f9e19e7.mockapi.io/api/v1/notes/notes")
-            .then(response => response.json())
-            .then((data: Array<Note>) => {
-                data.forEach(note => {
-                    dispatch(addNote(note))
-                })
+    const noteSelector= getFiltered(searchQuery, categoryFilter);
+    let ns = useSelector(noteSelector);
 
-                setLoading(false);
-            }).catch(error => {
-                setErrorMessage(error.message);
-                setLoading(false);
-            })
-        // eslint-disable-next-line
-    }, []);
+    // Implement when Firebase is ready
+    // useEffect(() => {
+    //     dispatch(clearAllNotes());
+    //     fetch("https://66478a962bb946cf2f9e19e7.mockapi.io/api/v1/notes/notes")
+    //         .then(response => response.json())
+    //         .then((data: Array<Note>) => {
+    //             data.forEach(note => {
+    //                 dispatch(addNote(note))
+    //             })
+    //
+    //             setLoading(false);
+    //         }).catch(error => {
+    //             setErrorMessage(error.message);
+    //             setLoading(false);
+    //         })
+    //     // eslint-disable-next-line
+    // }, []);
 
     useEffect(() => {
         setNotes(ns);
@@ -136,7 +138,7 @@ function Home() {
                     ))}
                 </MaterialTextInputEditText>
             </div>
-            <NotesList notes={notes} searchQuery={searchQuery} categoryFilter={categoryFilter}/>
+            <NotesList notes={notes}/>
         </div>
     );
 }

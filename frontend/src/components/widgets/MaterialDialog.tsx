@@ -19,29 +19,17 @@
  * */
 
 import React, {ReactNode} from 'react';
-import PropTypes from "prop-types";
 import {
     MaterialButtonError,
     MaterialButtonFilled,
     MaterialButtonOutlined,
     MaterialButtonTonal
 } from "./MaterialButtons";
-import {uuidv4} from "../../util/UUID";
 
 export type DialogAction = {
     btnTitle: string,
     btnPriority: string,
     btnCallback: any
-}
-
-MaterialDialog.propTypes = {
-    cancellable: PropTypes.bool, // Dialog can be cancelled by clicking outside
-    onClose: PropTypes.func, // Dialog close callback
-    dialogTitle: PropTypes.string, // Dialog title, if title is not set it will not be displayed
-    children: PropTypes.any, // Dialog content can contain any JSX elements
-    dialogActions: PropTypes.any, // Dialog actions can contain buttons or other actions
-    primaryButtonIsEnabled: PropTypes.bool, // Primary button is enabled by default
-    priority: PropTypes.string // Dialog priority
 }
 
 function MaterialDialog({cancellable, onClose, dialogTitle, children, dialogActions, primaryButtonIsEnabled = true, priority} : Readonly<{
@@ -53,17 +41,18 @@ function MaterialDialog({cancellable, onClose, dialogTitle, children, dialogActi
     primaryButtonIsEnabled?: boolean,
     priority?: string
 }>) {
-    const getButton = (btnTitle: string, btnPriority: string, btnCallback: any) : ReactNode => {
-        const key = uuidv4()
+    const getButton = (btnTitle: string, btnPriority: string, btnCallback: any, key: number) : ReactNode => {
+
+        const k = key.toString()
 
         if (btnPriority === "primary") {
-            return <MaterialButtonFilled key={key} onClick={btnCallback} disabled={!primaryButtonIsEnabled}>{btnTitle}</MaterialButtonFilled>
+            return <MaterialButtonFilled key={k} onClick={btnCallback} disabled={!primaryButtonIsEnabled}>{btnTitle}</MaterialButtonFilled>
         } else if (btnPriority === "secondary") {
-            return <MaterialButtonOutlined key={key} onClick={btnCallback}>{btnTitle}</MaterialButtonOutlined>
+            return <MaterialButtonOutlined key={k} onClick={btnCallback}>{btnTitle}</MaterialButtonOutlined>
         } else if (btnPriority === "error") {
-            return <MaterialButtonError key={key} onClick={btnCallback}>{btnTitle}</MaterialButtonError>
+            return <MaterialButtonError key={k} onClick={btnCallback}>{btnTitle}</MaterialButtonError>
         } else {
-            return <MaterialButtonTonal key={key} onClick={btnCallback}>{btnTitle}</MaterialButtonTonal>
+            return <MaterialButtonTonal key={k} onClick={btnCallback}>{btnTitle}</MaterialButtonTonal>
         }
     }
 
@@ -80,8 +69,8 @@ function MaterialDialog({cancellable, onClose, dialogTitle, children, dialogActi
                     {children}
                 </div>
                 <div className={"dialog-actions"}>
-                    {dialogActions !== undefined ? dialogActions.map((action: { btnTitle: string, btnPriority: string, btnCallback: any }) => {
-                        return getButton(action.btnTitle, action.btnPriority, action.btnCallback)
+                    {dialogActions !== undefined ? dialogActions.map((action: { btnTitle: string, btnPriority: string, btnCallback: any }, index: number) => {
+                        return getButton(action.btnTitle, action.btnPriority, action.btnCallback, index)
                     }) : null}
                 </div>
             </div>

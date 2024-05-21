@@ -53,17 +53,20 @@ type IdAction = {
 export const notesSlice = createSlice({
     name: 'notes',
     initialState: {
-        value: [],
+        value: JSON.parse(localStorage.getItem("notes") ?? "[]") as NoteArray,
     },
     reducers: {
         clearAllNotes: (state: NoteValue) => {
             state.value = []
+            localStorage.setItem("notes", JSON.stringify(state.value))
         },
         addNote: (state: NoteValue, action: NoteAction) => {
             state.value.push(action.payload)
+            localStorage.setItem("notes", JSON.stringify(state.value))
         },
         removeNote: (state, action : StringAction) => {
             state.value = state.value.filter((note: IdAction) => note.id !== action.payload)
+            localStorage.setItem("notes", JSON.stringify(state.value))
         },
         editNote: (state: any, action: NoteAction) => {
             state.value = state.value.map((note: IdAction) => {
@@ -78,6 +81,7 @@ export const notesSlice = createSlice({
                 }
                 return note
             })
+            localStorage.setItem("notes", JSON.stringify(state.value))
         }
     },
 })
@@ -92,5 +96,16 @@ export const selectNoteById = (id: string) => createSelector(
 );
 
 export const getAllNotes = () => (state: NoteState) => state.notes.value;
+
+export const getFiltered = (query: string, category: string) => createSelector(
+    (state: NoteState) => state.notes.value,
+    (notes) => notes.filter(note => {
+        const title = note.title.toLowerCase();
+        const content = note.content.toLowerCase();
+        const categoryMatch = category === "All" || note.category === category;
+        const queryMatch = title.includes(query.toLowerCase()) || content.includes(query.toLowerCase());
+        return categoryMatch && queryMatch;
+    })
+);
 
 export default notesSlice.reducer
